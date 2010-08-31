@@ -1,0 +1,8 @@
+*.o
+.deps
+clutter-bullet-test
+config.h
+config.h.in
+Makefile
+Makefile.in
+stamp-h1
