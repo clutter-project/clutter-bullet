@@ -63,6 +63,9 @@ struct _ClutterBulletGroupClass
 
 GType clutter_bullet_group_get_type (void);
 
+void  clutter_bullet_group_start    (ClutterBulletGroup *group);
+void  clutter_bullet_group_stop     (ClutterBulletGroup *group);
+
 
 
 #endif /* __CLUTTER_BULLET_GROUP_H__ */
