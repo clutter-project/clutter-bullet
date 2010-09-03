@@ -25,10 +25,6 @@
 
 
 
-#include <clutter/clutter.h>
-
-
-
 #define CLUTTER_BULLET_TYPE_GROUP            (clutter_bullet_group_get_type ())
 #define CLUTTER_BULLET_GROUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), CLUTTER_BULLET_TYPE_GROUP, ClutterBulletGroup))
 #define CLUTTER_BULLET_IS_GROUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CLUTTER_BULLET_TYPE_GROUP))

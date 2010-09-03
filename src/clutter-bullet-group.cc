@@ -20,7 +20,10 @@
 
 
 
+#include <clutter/clutter.h>
+
 #include "clutter-bullet-group.h"
+#include "clutter-bullet-child.h"
 
 #include <btBulletDynamicsCommon.h>
 
@@ -44,13 +47,15 @@ struct _ClutterBulletGroupPrivate
 
 
 
-G_DEFINE_TYPE (ClutterBulletGroup, clutter_bullet_group, CLUTTER_TYPE_GROUP);
+static gboolean clutter_bullet_group_update   (gpointer               data);
+
+static void     clutter_bullet_group_finalize (GObject               *obj);
+
+static void     clutter_container_iface_init  (ClutterContainerIface *iface);
 
 
 
-static gboolean clutter_bullet_group_update   (gpointer  data);
-
-static void     clutter_bullet_group_finalize (GObject  *obj);
+G_DEFINE_TYPE_WITH_CODE (ClutterBulletGroup, clutter_bullet_group, CLUTTER_TYPE_GROUP, G_IMPLEMENT_INTERFACE (CLUTTER_TYPE_CONTAINER, clutter_container_iface_init));
 
 
 
@@ -154,4 +159,12 @@ clutter_bullet_group_finalize (GObject *obj)
   delete group->priv->config;
 
   G_OBJECT_CLASS (clutter_bullet_group_parent_class)->finalize (obj);
+}
+
+
+
+static void
+clutter_container_iface_init (ClutterContainerIface *iface)
+{
+  iface->child_meta_type = CLUTTER_BULLET_TYPE_CHILD;
 }

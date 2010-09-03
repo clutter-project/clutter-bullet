@@ -22,13 +22,34 @@
 
 #include <clutter/clutter.h>
 
-#include "clutter-bullet.h"
+#include "clutter-bullet-child.h"
 
 
 
-int
-main (int   argc,
-      char *argv[])
+#define CLUTTER_BULLET_CHILD_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), CLUTTER_BULLET_TYPE_CHILD, ClutterBulletChildPrivate))
+
+
+
+struct _ClutterBulletChildPrivate
 {
-  return 0;
+};
+
+
+
+G_DEFINE_TYPE (ClutterBulletChild, clutter_bullet_child, CLUTTER_TYPE_CHILD_META);
+
+
+
+static void
+clutter_bullet_child_init (ClutterBulletChild *self)
+{
+  self->priv = CLUTTER_BULLET_CHILD_GET_PRIVATE (self);
+}
+
+
+
+static void
+clutter_bullet_child_class_init (ClutterBulletChildClass *klass)
+{
+  g_type_class_add_private (klass, sizeof (ClutterBulletChildPrivate));
 }
