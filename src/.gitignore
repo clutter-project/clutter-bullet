@@ -1,0 +1,6 @@
+*.o
+.deps
+clutter-bullet-test
+config.h
+config.h.in
+stamp-h1
