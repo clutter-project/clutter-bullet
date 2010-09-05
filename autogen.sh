@@ -1,6 +1,14 @@
 #!/bin/sh
 
-CRAP=""
+CRAP="aclocal.m4
+      configure
+      depcomp
+      INSTALL
+      install-sh
+      Makefile.in
+      missing
+      src/config.h.in
+      src/Makefile.in"
 
 if [ "$1" = "clean" ]; then
   make maintainer-clean
