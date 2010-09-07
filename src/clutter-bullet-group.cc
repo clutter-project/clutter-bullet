@@ -42,9 +42,21 @@ struct _ClutterBulletGroupPrivate
   GTimeVal                  time;
   gint                      steps;
   gdouble                   step;
+
+  gdouble                   scale;
 };
 
 
+
+static ClutterContainerIface *container;
+
+
+
+static void     clutter_bullet_group_add      (ClutterContainer      *group,
+                                               ClutterActor          *actor);
+
+static void     clutter_bullet_group_remove   (ClutterContainer      *group,
+                                               ClutterActor          *actor);
 
 static gboolean clutter_bullet_group_update   (gpointer               data);
 
@@ -84,6 +96,8 @@ clutter_bullet_group_init (ClutterBulletGroup *self)
   self->priv->time.tv_usec = 0;
   self->priv->steps        = 60;
   self->priv->step         = 1 / 60.0;
+
+  self->priv->scale = 1;
 }
 
 
@@ -124,6 +138,24 @@ clutter_bullet_group_stop (ClutterBulletGroup *group)
   group->priv->timer        = 0;
   group->priv->time.tv_sec  = 0;
   group->priv->time.tv_usec = 0;
+}
+
+
+
+static void
+clutter_bullet_group_add (ClutterContainer *group,
+                          ClutterActor     *actor)
+{
+  container->add (group, actor);
+}
+
+
+
+static void
+clutter_bullet_group_remove (ClutterContainer *group,
+                             ClutterActor     *actor)
+{
+  container->remove (group, actor);
 }
 
 
@@ -175,4 +207,8 @@ static void
 clutter_container_iface_init (ClutterContainerIface *iface,
                               gpointer               data)
 {
+  container = (ClutterContainerIface *) g_type_interface_peek_parent (iface);
+
+  iface->add    = clutter_bullet_group_add;
+  iface->remove = clutter_bullet_group_remove;
 }
