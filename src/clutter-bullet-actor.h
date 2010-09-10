@@ -32,7 +32,6 @@
 
 
 
-typedef struct btCollisionShape             btCollisionShape;
 typedef struct _ClutterBulletActor          ClutterBulletActor;
 typedef struct _ClutterBulletActorInterface ClutterBulletActorInterface;
 
@@ -40,18 +39,12 @@ typedef struct _ClutterBulletActorInterface ClutterBulletActorInterface;
 
 struct _ClutterBulletActorInterface
 {
-  GTypeInterface       parent;
-
-  gdouble            (*get_mass)  (ClutterBulletActor *self);
-  btCollisionShape * (*get_shape) (ClutterBulletActor *self);
+  GTypeInterface parent;
 };
 
 
 
-GType              clutter_bullet_actor_get_type  (void);
-
-gdouble            clutter_bullet_actor_get_mass  (ClutterBulletActor *self);
-btCollisionShape * clutter_bullet_actor_get_shape (ClutterBulletActor *self);
+GType clutter_bullet_actor_get_type (void);
 
 
 

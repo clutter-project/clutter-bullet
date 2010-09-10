@@ -37,22 +37,4 @@ G_DEFINE_INTERFACE (
 static void
 clutter_bullet_actor_default_init (ClutterBulletActorInterface *klass)
 {
-  klass->get_mass  = NULL;
-  klass->get_shape = NULL;
-}
-
-
-
-gdouble
-clutter_bullet_actor_get_mass (ClutterBulletActor *self)
-{
-  return CLUTTER_BULLET_ACTOR_GET_INTERFACE (self)->get_mass (self);
-}
-
-
-
-btCollisionShape *
-clutter_bullet_actor_get_shape (ClutterBulletActor *self)
-{
-  return CLUTTER_BULLET_ACTOR_GET_INTERFACE (self)->get_shape (self);
 }
