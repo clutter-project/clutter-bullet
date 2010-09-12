@@ -26,9 +26,27 @@
 
 
 
+static ClutterActor *stage;
+static ClutterActor *group;
+
+
+
 int
 main (int   argc,
       char *argv[])
 {
+  ClutterColor bg = { 0, 0, 0, 255 };
+
+  clutter_init (&argc, &argv);
+
+  stage = clutter_stage_get_default ();
+  clutter_stage_set_color (CLUTTER_STAGE (stage), &bg);
+  clutter_actor_show_all (stage);
+
+  group = clutter_bullet_group_new ();
+  clutter_container_add_actor (CLUTTER_CONTAINER (stage), group);
+
+  clutter_main ();
+
   return 0;
 }

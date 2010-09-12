@@ -25,6 +25,10 @@
 
 
 
+G_BEGIN_DECLS
+
+
+
 #define CLUTTER_BULLET_TYPE_GROUP            (clutter_bullet_group_get_type ())
 #define CLUTTER_BULLET_GROUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), CLUTTER_BULLET_TYPE_GROUP, ClutterBulletGroup))
 #define CLUTTER_BULLET_IS_GROUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CLUTTER_BULLET_TYPE_GROUP))
@@ -57,10 +61,16 @@ struct _ClutterBulletGroupClass
 
 
 
-GType clutter_bullet_group_get_type (void);
+GType          clutter_bullet_group_get_type (void);
 
-void  clutter_bullet_group_start    (ClutterBulletGroup *group);
-void  clutter_bullet_group_stop     (ClutterBulletGroup *group);
+ClutterActor * clutter_bullet_group_new      (void);
+
+void           clutter_bullet_group_start    (ClutterBulletGroup *group);
+void           clutter_bullet_group_stop     (ClutterBulletGroup *group);
+
+
+
+G_END_DECLS
 
 
 

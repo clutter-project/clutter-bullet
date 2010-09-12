@@ -25,6 +25,10 @@
 
 
 
+G_BEGIN_DECLS
+
+
+
 #define CLUTTER_BULLET_TYPE_ACTOR                (clutter_bullet_actor_get_type ())
 #define CLUTTER_BULLET_ACTOR(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), CLUTTER_BULLET_TYPE_ACTOR, ClutterBulletActor))
 #define CLUTTER_BULLET_IS_ACTOR(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CLUTTER_BULLET_TYPE_ACTOR))
@@ -45,6 +49,10 @@ struct _ClutterBulletActorInterface
 
 
 GType clutter_bullet_actor_get_type (void);
+
+
+
+G_END_DECLS
 
 
 

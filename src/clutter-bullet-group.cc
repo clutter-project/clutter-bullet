@@ -23,6 +23,7 @@
 #include <clutter/clutter.h>
 
 #include "clutter-bullet-group.h"
+#include "clutter-bullet-actor.h"
 
 #include <btBulletDynamicsCommon.h>
 
@@ -48,22 +49,40 @@ struct _ClutterBulletGroupPrivate
 
 
 
+enum
+{
+  PROP_0,
+  PROP_SCALE
+};
+
+
+
 static ClutterContainerIface *container;
 
 
 
-static void     clutter_bullet_group_add      (ClutterContainer      *group,
-                                               ClutterActor          *actor);
+static void     clutter_bullet_group_get_property (GObject               *obj,
+                                                   guint                  key,
+                                                   GValue                *val,
+                                                   GParamSpec            *spec);
 
-static void     clutter_bullet_group_remove   (ClutterContainer      *group,
-                                               ClutterActor          *actor);
+static void     clutter_bullet_group_set_property (GObject               *obj,
+                                                   guint                  key,
+                                                   const GValue          *val,
+                                                   GParamSpec            *spec);
 
-static gboolean clutter_bullet_group_update   (gpointer               data);
+static void     clutter_bullet_group_add          (ClutterContainer      *group,
+                                                   ClutterActor          *actor);
 
-static void     clutter_bullet_group_finalize (GObject               *obj);
+static void     clutter_bullet_group_remove       (ClutterContainer      *group,
+                                                   ClutterActor          *actor);
 
-static void     clutter_container_iface_init  (ClutterContainerIface *iface,
-                                               gpointer               data);
+static gboolean clutter_bullet_group_update       (gpointer               data);
+
+static void     clutter_bullet_group_finalize     (GObject               *obj);
+
+static void     clutter_container_iface_init      (ClutterContainerIface *iface,
+                                                   gpointer               data);
 
 
 
@@ -96,8 +115,6 @@ clutter_bullet_group_init (ClutterBulletGroup *self)
   self->priv->time.tv_usec = 0;
   self->priv->steps        = 60;
   self->priv->step         = 1 / 60.0;
-
-  self->priv->scale = 1;
 }
 
 
@@ -107,9 +124,75 @@ clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
 {
   GObjectClass *glass = G_OBJECT_CLASS (klass);
 
-  glass->finalize = clutter_bullet_group_finalize;
-
   g_type_class_add_private (klass, sizeof (ClutterBulletGroupPrivate));
+
+  glass->get_property = clutter_bullet_group_get_property;
+  glass->set_property = clutter_bullet_group_set_property;
+  glass->finalize     = clutter_bullet_group_finalize;
+
+  GParamSpec *spec = g_param_spec_double ("scale",
+                                          "Pixels per metre",
+                                          "Set pixels per metre",
+                                          G_MINDOUBLE,
+                                          G_MAXDOUBLE,
+                                          1,
+                                          (GParamFlags)
+                                          (G_PARAM_READABLE |
+                                           G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (glass, PROP_SCALE, spec);
+}
+
+
+
+ClutterActor *
+clutter_bullet_group_new (void)
+{
+  return (ClutterActor *) g_object_new (CLUTTER_BULLET_TYPE_GROUP, NULL);
+}
+
+
+
+static void
+clutter_bullet_group_get_property (GObject    *obj,
+                                   guint       key,
+                                   GValue     *val,
+                                   GParamSpec *spec)
+{
+  ClutterBulletGroup *self = CLUTTER_BULLET_GROUP (obj);
+
+  switch (key)
+  {
+    case PROP_SCALE:
+      g_value_set_double (val, self->priv->scale);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, key, spec);
+      break;
+  }
+}
+
+
+
+static void
+clutter_bullet_group_set_property (GObject      *obj,
+                                   guint         key,
+                                   const GValue *val,
+                                   GParamSpec   *spec)
+{
+  ClutterBulletGroup *self = CLUTTER_BULLET_GROUP (obj);
+
+  switch (key)
+  {
+    case PROP_SCALE:
+      self->priv->scale = g_value_get_double (val);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, key, spec);
+      break;
+  }
 }
 
 
