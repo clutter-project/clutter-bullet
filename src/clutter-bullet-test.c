@@ -43,7 +43,7 @@ main (int   argc,
   clutter_stage_set_color (CLUTTER_STAGE (stage), &bg);
   clutter_actor_show_all (stage);
 
-  group = clutter_bullet_group_new ();
+  group = clutter_bullet_group_new (100);
   clutter_container_add_actor (CLUTTER_CONTAINER (stage), group);
 
   clutter_main ();

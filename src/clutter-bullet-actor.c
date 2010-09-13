@@ -38,3 +38,21 @@ static void
 clutter_bullet_actor_default_init (ClutterBulletActorInterface *klass)
 {
 }
+
+
+
+void
+clutter_bullet_actor_bind (ClutterBulletActor *self,
+                           ClutterBulletGroup *group)
+{
+  CLUTTER_BULLET_ACTOR_GET_INTERFACE (self)->bind (self, group);
+}
+
+
+
+void
+clutter_bullet_actor_unbind (ClutterBulletActor *self,
+                             ClutterBulletGroup *group)
+{
+  CLUTTER_BULLET_ACTOR_GET_INTERFACE (self)->unbind (self, group);
+}

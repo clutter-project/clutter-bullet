@@ -25,6 +25,10 @@
 
 
 
+#include "clutter-bullet-group.h"
+
+
+
 G_BEGIN_DECLS
 
 
@@ -43,12 +47,24 @@ typedef struct _ClutterBulletActorInterface ClutterBulletActorInterface;
 
 struct _ClutterBulletActorInterface
 {
-  GTypeInterface parent;
+  GTypeInterface   parent;
+
+  void           (*bind)   (ClutterBulletActor *,
+                            ClutterBulletGroup *);
+
+  void           (*unbind) (ClutterBulletActor *,
+                            ClutterBulletGroup *);
 };
 
 
 
 GType clutter_bullet_actor_get_type (void);
+
+void  clutter_bullet_actor_bind     (ClutterBulletActor *self,
+                                     ClutterBulletGroup *group);
+
+void  clutter_bullet_actor_unbind   (ClutterBulletActor *self,
+                                     ClutterBulletGroup *group);
 
 
 

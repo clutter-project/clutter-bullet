@@ -71,10 +71,10 @@ static void     clutter_bullet_group_set_property (GObject               *obj,
                                                    const GValue          *val,
                                                    GParamSpec            *spec);
 
-static void     clutter_bullet_group_add          (ClutterContainer      *group,
+static void     clutter_bullet_group_add          (ClutterContainer      *self,
                                                    ClutterActor          *actor);
 
-static void     clutter_bullet_group_remove       (ClutterContainer      *group,
+static void     clutter_bullet_group_remove       (ClutterContainer      *self,
                                                    ClutterActor          *actor);
 
 static gboolean clutter_bullet_group_update       (gpointer               data);
@@ -146,9 +146,11 @@ clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
 
 
 ClutterActor *
-clutter_bullet_group_new (void)
+clutter_bullet_group_new (gdouble scale)
 {
-  return (ClutterActor *) g_object_new (CLUTTER_BULLET_TYPE_GROUP, NULL);
+  return (ClutterActor *) g_object_new (CLUTTER_BULLET_TYPE_GROUP,
+                                        "scale", scale,
+                                        NULL);
 }
 
 
@@ -226,19 +228,29 @@ clutter_bullet_group_stop (ClutterBulletGroup *group)
 
 
 static void
-clutter_bullet_group_add (ClutterContainer *group,
+clutter_bullet_group_add (ClutterContainer *self,
                           ClutterActor     *actor)
 {
-  container->add (group, actor);
+  ClutterBulletGroup *group = CLUTTER_BULLET_GROUP (self);
+
+  container->add (self, actor);
+
+  if (CLUTTER_BULLET_IS_ACTOR (actor))
+    clutter_bullet_actor_bind (CLUTTER_BULLET_ACTOR (actor), group);
 }
 
 
 
 static void
-clutter_bullet_group_remove (ClutterContainer *group,
+clutter_bullet_group_remove (ClutterContainer *self,
                              ClutterActor     *actor)
 {
-  container->remove (group, actor);
+  ClutterBulletGroup *group = CLUTTER_BULLET_GROUP (self);
+
+  container->remove (self, actor);
+
+  if (CLUTTER_BULLET_IS_ACTOR (actor))
+    clutter_bullet_actor_unbind (CLUTTER_BULLET_ACTOR (actor), group);
 }
 
 
