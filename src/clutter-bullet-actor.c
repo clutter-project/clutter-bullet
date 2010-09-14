@@ -37,6 +37,19 @@ G_DEFINE_INTERFACE (
 static void
 clutter_bullet_actor_default_init (ClutterBulletActorInterface *klass)
 {
+  static GParamSpec *spec = NULL;
+
+  if (spec == NULL)
+  {
+    spec = g_param_spec_object ("actor",
+                                "Target actor",
+                                "Target actor to add to group",
+                                CLUTTER_TYPE_ACTOR,
+                                (GParamFlags) (G_PARAM_READABLE |
+                                               G_PARAM_CONSTRUCT_ONLY));
+
+    g_object_interface_install_property (klass, spec);
+  }
 }
 
 
