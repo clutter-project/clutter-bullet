@@ -274,10 +274,17 @@ clutter_bullet_group_add (ClutterContainer *self,
 {
   ClutterBulletGroup *group = CLUTTER_BULLET_GROUP (self);
 
-  container->add (self, actor);
-
   if (CLUTTER_BULLET_IS_ACTOR (actor))
-    clutter_bullet_actor_bind (CLUTTER_BULLET_ACTOR (actor), group);
+  {
+    ClutterBulletActor *binder = CLUTTER_BULLET_ACTOR (actor);
+    ClutterActor       *child  = clutter_bullet_actor_get_actor (binder);
+
+    container->add (self, child);
+
+    clutter_bullet_actor_bind (binder, group);
+  }
+  else
+    container->add (self, actor);
 }
 
 
@@ -288,10 +295,17 @@ clutter_bullet_group_remove (ClutterContainer *self,
 {
   ClutterBulletGroup *group = CLUTTER_BULLET_GROUP (self);
 
-  container->remove (self, actor);
-
   if (CLUTTER_BULLET_IS_ACTOR (actor))
-    clutter_bullet_actor_unbind (CLUTTER_BULLET_ACTOR (actor), group);
+  {
+    ClutterBulletActor *binder = CLUTTER_BULLET_ACTOR (actor);
+    ClutterActor       *child  = clutter_bullet_actor_get_actor (binder);
+
+    clutter_bullet_actor_unbind (binder, group);
+
+    container->remove (self, child);
+  }
+  else
+    container->remove (self, actor);
 }
 
 
