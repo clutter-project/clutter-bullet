@@ -62,6 +62,9 @@ static ClutterContainerIface *container;
 
 
 
+static void     clutter_container_iface_init      (ClutterContainerIface *iface,
+                                                   gpointer               data);
+
 static void     clutter_bullet_group_get_property (GObject               *obj,
                                                    guint                  key,
                                                    GValue                *val,
@@ -81,9 +84,6 @@ static void     clutter_bullet_group_remove       (ClutterContainer      *self,
 static gboolean clutter_bullet_group_update       (gpointer               data);
 
 static void     clutter_bullet_group_finalize     (GObject               *obj);
-
-static void     clutter_container_iface_init      (ClutterContainerIface *iface,
-                                                   gpointer               data);
 
 
 
@@ -150,6 +150,18 @@ clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
                              (GParamFlags) G_PARAM_READWRITE);
 
   g_object_class_install_property (glass, PROP_GRAVITY, spec);
+}
+
+
+
+static void
+clutter_container_iface_init (ClutterContainerIface *iface,
+                              gpointer               data)
+{
+  container = (ClutterContainerIface *) g_type_interface_peek_parent (iface);
+
+  iface->add    = clutter_bullet_group_add;
+  iface->remove = clutter_bullet_group_remove;
 }
 
 
@@ -349,16 +361,4 @@ clutter_bullet_group_finalize (GObject *obj)
   delete group->priv->config;
 
   G_OBJECT_CLASS (clutter_bullet_group_parent_class)->finalize (obj);
-}
-
-
-
-static void
-clutter_container_iface_init (ClutterContainerIface *iface,
-                              gpointer               data)
-{
-  container = (ClutterContainerIface *) g_type_interface_peek_parent (iface);
-
-  iface->add    = clutter_bullet_group_add;
-  iface->remove = clutter_bullet_group_remove;
 }
