@@ -54,6 +54,19 @@ clutter_bullet_actor_default_init (ClutterBulletActorInterface *klass)
 
 
 
+ClutterActor *
+clutter_bullet_actor_get_actor (ClutterBulletActor *self)
+{
+  ClutterActor *actor;
+
+  g_object_get   (self, "actor", &actor, NULL);
+  g_object_unref (actor);
+
+  return actor;
+}
+
+
+
 void
 clutter_bullet_actor_bind (ClutterBulletActor *self,
                            ClutterBulletGroup *group)

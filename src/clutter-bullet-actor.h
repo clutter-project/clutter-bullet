@@ -58,13 +58,15 @@ struct _ClutterBulletActorInterface
 
 
 
-GType clutter_bullet_actor_get_type (void);
+GType          clutter_bullet_actor_get_type  (void);
 
-void  clutter_bullet_actor_bind     (ClutterBulletActor *self,
-                                     ClutterBulletGroup *group);
+ClutterActor * clutter_bullet_actor_get_actor (ClutterBulletActor *self);
 
-void  clutter_bullet_actor_unbind   (ClutterBulletActor *self,
-                                     ClutterBulletGroup *group);
+void           clutter_bullet_actor_bind      (ClutterBulletActor *self,
+                                               ClutterBulletGroup *group);
+
+void           clutter_bullet_actor_unbind    (ClutterBulletActor *self,
+                                               ClutterBulletGroup *group);
 
 
 
