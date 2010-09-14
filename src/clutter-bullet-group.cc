@@ -52,7 +52,8 @@ struct _ClutterBulletGroupPrivate
 enum
 {
   PROP_0,
-  PROP_SCALE
+  PROP_SCALE,
+  PROP_GRAVITY
 };
 
 
@@ -123,6 +124,7 @@ static void
 clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
 {
   GObjectClass *glass = G_OBJECT_CLASS (klass);
+  GParamSpec   *spec;
 
   g_type_class_add_private (klass, sizeof (ClutterBulletGroupPrivate));
 
@@ -130,17 +132,24 @@ clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
   glass->set_property = clutter_bullet_group_set_property;
   glass->finalize     = clutter_bullet_group_finalize;
 
-  GParamSpec *spec = g_param_spec_double ("scale",
-                                          "Pixels per metre",
-                                          "Set pixels per metre",
-                                          G_MINDOUBLE,
-                                          G_MAXDOUBLE,
-                                          1,
-                                          (GParamFlags)
-                                          (G_PARAM_READABLE |
-                                           G_PARAM_CONSTRUCT_ONLY));
+  spec = g_param_spec_double ("scale",
+                              "Scaling factor",
+                              "Scale in pixels per metre",
+                              G_MINDOUBLE,
+                              G_MAXDOUBLE,
+                              1,
+                              (GParamFlags) (G_PARAM_READABLE |
+                                             G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (glass, PROP_SCALE, spec);
+
+  spec = g_param_spec_boxed ("gravity",
+                             "Gravity vector",
+                             "Gravity in pixels per square second",
+                             CLUTTER_TYPE_VERTEX,
+                             (GParamFlags) G_PARAM_READWRITE);
+
+  g_object_class_install_property (glass, PROP_GRAVITY, spec);
 }
 
 
@@ -169,6 +178,22 @@ clutter_bullet_group_get_property (GObject    *obj,
       g_value_set_double (val, self->priv->scale);
       break;
 
+    case PROP_GRAVITY:
+      {
+        ClutterVertex vector;
+        btVector3     gravity = self->priv->world->getGravity ();
+
+        gravity *= self->priv->scale;
+
+        vector.x = gravity.x ();
+        vector.y = gravity.y ();
+        vector.z = gravity.z ();
+
+        g_value_set_boxed (val, &vector);
+      }
+
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, key, spec);
       break;
@@ -189,6 +214,22 @@ clutter_bullet_group_set_property (GObject      *obj,
   {
     case PROP_SCALE:
       self->priv->scale = g_value_get_double (val);
+      break;
+
+    case PROP_GRAVITY:
+      {
+        const ClutterVertex *vector = (const ClutterVertex *) g_value_get_boxed (val);
+
+        if (vector != NULL)
+        {
+          btVector3 gravity (vector->x, vector->y, vector->z);
+
+          gravity /= self->priv->scale;
+
+          self->priv->world->setGravity (gravity);
+        }
+      }
+
       break;
 
     default:
