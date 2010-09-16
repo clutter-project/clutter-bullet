@@ -27,6 +27,8 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include "clutter-bullet-private.h"
+
 
 
 #define CLUTTER_BULLET_GROUP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), CLUTTER_BULLET_TYPE_GROUP, ClutterBulletGroupPrivate))

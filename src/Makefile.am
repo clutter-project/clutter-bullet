@@ -1,8 +1,9 @@
 AM_CPPFLAGS = $(BULLET_CFLAGS) $(CLUTTER_CFLAGS)
 AM_CFLAGS   = # -ansi -pedantic -Wall
 
-CLUTTER_BULLET = clutter-bullet-actor.c  \
-                 clutter-bullet-group.cc
+CLUTTER_BULLET = clutter-bullet-actor.c    \
+                 clutter-bullet-group.cc   \
+                 clutter-bullet-private.cc
 
 bin_PROGRAMS = clutter-bullet-test
 
