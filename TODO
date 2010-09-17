@@ -1,7 +1,8 @@
-0. check if it's okay to g_object_unref in clutter_bullet_actor_get_actor
-1. find way of obtaining a btMotionState from ClutterBulletActor
-2. find way of obtaining a btCollisionShape with mass from ClutterBulletActor
-3. implement ClutterContainer add/remove on ClutterBulletGroup
-4. figure out how to obtain a ClutterActor's btRigidBody
-5. attach to an allocation-changed signal to update the btRigidBody
-6. allow getting/setting of scale in ClutterBulletGroup
+1. check if the w-coordinate should be 0 or 1 in ClutterBulletMotionState
+2. check if it's okay to g_object_unref in clutter_bullet_actor_get_actor
+3. find way of obtaining a btMotionState from ClutterBulletActor
+4. find way of obtaining a btCollisionShape with mass from ClutterBulletActor
+5. implement ClutterContainer add/remove on ClutterBulletGroup
+6. figure out how to obtain a ClutterActor's btRigidBody
+7. attach to an allocation-changed signal to update the btRigidBody
+8. allow getting/setting of scale in ClutterBulletGroup
