@@ -38,6 +38,24 @@ ClutterBulletMotionState::ClutterBulletMotionState (ClutterActor *a)
 void
 ClutterBulletMotionState::getWorldTransform (btTransform &t) const
 {
+  CoglMatrix    a;
+  ClutterVertex x;
+  btVector3     y;
+
+  clutter_actor_get_size (actor, &x.x, &x.y);
+
+  x.x /= 2;
+  x.y /= 2;
+  x.z  = 0;
+
+  clutter_actor_get_transformation_matrix (actor, &a);
+
+  y.setX (a.xx * x.x + a.xy * x.y + a.xz * x.z + a.xw);
+  y.setY (a.yx * x.x + a.yy * x.y + a.yz * x.z + a.yw);
+  y.setZ (a.zx * x.x + a.zy * x.y + a.zz * x.z + a.zw);
+  y.setW (0);
+
+  t.setOrigin (y);
 }
 
 
