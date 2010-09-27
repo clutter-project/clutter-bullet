@@ -25,6 +25,7 @@
 #include "clutter-bullet-group.h"
 #include "clutter-bullet-actor.h"
 
+#include <BulletCollision/CollisionShapes/btBox2dShape.h>
 #include <btBulletDynamicsCommon.h>
 
 #include "clutter-bullet-private.h"
@@ -302,7 +303,30 @@ clutter_bullet_group_add (ClutterContainer *self,
     clutter_bullet_actor_bind (binder, group);
   }
   else
+  {
     container->add (self, actor);
+
+    if (g_hash_table_lookup (group->priv->body, actor) == NULL)
+    {
+      btCollisionShape *shape;
+      btVector3         tensor;
+      gfloat            w, h;
+
+      clutter_actor_get_size (actor, &w, &h);
+      shape = new btBox2dShape (btVector3 (w / 2, h / 2, 0));
+      shape->calculateLocalInertia (0, tensor);
+
+      btRigidBody *body = new btRigidBody (
+        btRigidBody::btRigidBodyConstructionInfo (
+          0, new ClutterBulletMotionState (actor), shape, tensor
+        )
+      );
+
+      group->priv->world->addRigidBody (body);
+
+      g_hash_table_replace (group->priv->body, actor, body);
+    }
+  }
 }
 
 
@@ -323,7 +347,23 @@ clutter_bullet_group_remove (ClutterContainer *self,
     container->remove (self, child);
   }
   else
+  {
+    gpointer     obj  = g_hash_table_lookup (group->priv->body, actor);
+    btRigidBody *body = (btRigidBody *) obj;
+
+    if (body != NULL)
+    {
+      g_hash_table_remove (group->priv->body, actor);
+
+      group->priv->world->removeRigidBody (body);
+
+      delete body->getCollisionShape ();
+      delete body->getMotionState ();
+      delete body;
+    }
+
     container->remove (self, actor);
+  }
 }
 
 
