@@ -41,6 +41,8 @@ struct _ClutterBulletGroupPrivate
   btConstraintSolver       *solver;
   btCollisionConfiguration *config;
 
+  GHashTable               *body;
+
   guint                     timer;
   GTimeVal                  time;
   gint                      steps;
@@ -112,6 +114,8 @@ clutter_bullet_group_init (ClutterBulletGroup *self)
 
   self->priv->solver = NULL;
   self->priv->world  = new btDiscreteDynamicsWorld (dispatch, broadphase, self->priv->solver, self->priv->config);
+
+  self->priv->body = g_hash_table_new (NULL, NULL);
 
   self->priv->timer        = 0;
   self->priv->time.tv_sec  = 0;
@@ -255,29 +259,29 @@ clutter_bullet_group_set_property (GObject      *obj,
 
 
 void
-clutter_bullet_group_start (ClutterBulletGroup *group)
+clutter_bullet_group_start (ClutterBulletGroup *self)
 {
-  if (group->priv->timer)
+  if (self->priv->timer)
     return;
 
-  g_get_current_time (&group->priv->time);
+  g_get_current_time (&self->priv->time);
 
-  group->priv->timer = clutter_threads_add_repaint_func (clutter_bullet_group_update, group, NULL);
+  self->priv->timer = clutter_threads_add_repaint_func (clutter_bullet_group_update, self, NULL);
 }
 
 
 
 void
-clutter_bullet_group_stop (ClutterBulletGroup *group)
+clutter_bullet_group_stop (ClutterBulletGroup *self)
 {
-  if (!group->priv->timer)
+  if (!self->priv->timer)
     return;
 
-  clutter_threads_remove_repaint_func (group->priv->timer);
+  clutter_threads_remove_repaint_func (self->priv->timer);
 
-  group->priv->timer        = 0;
-  group->priv->time.tv_sec  = 0;
-  group->priv->time.tv_usec = 0;
+  self->priv->timer        = 0;
+  self->priv->time.tv_sec  = 0;
+  self->priv->time.tv_usec = 0;
 }
 
 
@@ -327,19 +331,19 @@ clutter_bullet_group_remove (ClutterContainer *self,
 static gboolean
 clutter_bullet_group_update (gpointer data)
 {
-  ClutterBulletGroup *group = (ClutterBulletGroup *) data;
+  ClutterBulletGroup *self  = (ClutterBulletGroup *) data;
   gdouble             delta = 0;
   GTimeVal            time;
 
   g_get_current_time (&time);
 
-  if (group->priv->time.tv_sec || group->priv->time.tv_usec)
-    delta = 1E-6 * (time.tv_usec - group->priv->time.tv_usec)
-          +        (time.tv_sec  - group->priv->time.tv_sec);
+  if (self->priv->time.tv_sec || self->priv->time.tv_usec)
+    delta = 1E-6 * (time.tv_usec - self->priv->time.tv_usec)
+          +        (time.tv_sec  - self->priv->time.tv_sec);
 
-  group->priv->time = time;
+  self->priv->time = time;
 
-  group->priv->world->stepSimulation (delta, group->priv->steps, group->priv->step);
+  self->priv->world->stepSimulation (delta, self->priv->steps, self->priv->step);
 
   return TRUE;
 }
@@ -349,18 +353,22 @@ clutter_bullet_group_update (gpointer data)
 static void
 clutter_bullet_group_finalize (GObject *obj)
 {
-  ClutterBulletGroup *group = CLUTTER_BULLET_GROUP (obj);
+  ClutterBulletGroup *self = CLUTTER_BULLET_GROUP (obj);
 
-  clutter_bullet_group_stop (group);
+  clutter_bullet_group_stop (self);
 
-  btDispatcher          *dispatch   = group->priv->world->getDispatcher ();
-  btBroadphaseInterface *broadphase = group->priv->world->getBroadphase ();
+  clutter_group_remove_all (CLUTTER_GROUP (obj));
 
-  delete group->priv->world;
-  delete group->priv->solver;
+  g_hash_table_destroy (self->priv->body);
+
+  btDispatcher          *dispatch   = self->priv->world->getDispatcher ();
+  btBroadphaseInterface *broadphase = self->priv->world->getBroadphase ();
+
+  delete self->priv->world;
+  delete self->priv->solver;
   delete broadphase;
   delete dispatch;
-  delete group->priv->config;
+  delete self->priv->config;
 
   G_OBJECT_CLASS (clutter_bullet_group_parent_class)->finalize (obj);
 }
