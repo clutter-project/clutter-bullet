@@ -33,8 +33,10 @@
 
 
 
-ClutterBulletMotionState::ClutterBulletMotionState (ClutterActor *a)
-: actor (a)
+ClutterBulletMotionState::ClutterBulletMotionState (ClutterActor *a,
+                                                    gdouble       s)
+: actor (a),
+  scale (s)
 {
 }
 
@@ -62,7 +64,7 @@ ClutterBulletMotionState::getWorldTransform (btTransform &t) const
                        "rotation-angle-y", &ry,
                        "rotation-angle-z", &rz, NULL);
 
-  t.setOrigin (btVector3 (x.x / w, x.y / w, x.z / w));
+  t.setOrigin (btVector3 (x.x, x.y, x.z) / (w * scale));
   t.getBasis ().setEulerZYX (RAD (rx), RAD (ry), RAD (rz));
 }
 
@@ -97,9 +99,9 @@ ClutterBulletMotionState::setWorldTransform (const btTransform &t)
 
   cogl_matrix_transform_point (&a, &x.x, &x.y, &x.z, &w);
 
-  dx.x = t.getOrigin ().x () - x.x / w;
-  dx.y = t.getOrigin ().y () - x.y / w;
-  dx.z = t.getOrigin ().z () - x.z / w;
+  dx.x = scale * t.getOrigin ().x () - x.x / w;
+  dx.y = scale * t.getOrigin ().y () - x.y / w;
+  dx.z = scale * t.getOrigin ().z () - x.z / w;
 
   clutter_actor_move_by (actor, dx.x, dx.y);
   clutter_actor_set_depth (actor, clutter_actor_get_depth (actor) + dx.z);

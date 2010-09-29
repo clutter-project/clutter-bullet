@@ -63,7 +63,7 @@ enum
 
 
 
-static ClutterContainerIface *container;
+static ClutterContainerIface *parent_container;
 
 
 
@@ -154,7 +154,8 @@ clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
                              "Gravity vector",
                              "Gravity in pixels per square second",
                              CLUTTER_TYPE_VERTEX,
-                             (GParamFlags) G_PARAM_READWRITE);
+                             (GParamFlags) (G_PARAM_READWRITE |
+                                            G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (glass, PROP_GRAVITY, spec);
 }
@@ -165,7 +166,7 @@ static void
 clutter_container_iface_init (ClutterContainerIface *iface,
                               gpointer               data)
 {
-  container = (ClutterContainerIface *) g_type_interface_peek_parent (iface);
+  parent_container = (ClutterContainerIface *) g_type_interface_peek_parent (iface);
 
   iface->add    = clutter_bullet_group_add;
   iface->remove = clutter_bullet_group_remove;
@@ -298,13 +299,13 @@ clutter_bullet_group_add (ClutterContainer *self,
     ClutterBulletActor *binder = CLUTTER_BULLET_ACTOR (actor);
     ClutterActor       *child  = clutter_bullet_actor_get_actor (binder);
 
-    container->add (self, child);
+    parent_container->add (self, child == NULL ? actor : child);
 
     clutter_bullet_actor_bind (binder, group);
   }
   else
   {
-    container->add (self, actor);
+    parent_container->add (self, actor);
 
     if (g_hash_table_lookup (group->priv->body, actor) == NULL)
     {
@@ -313,12 +314,19 @@ clutter_bullet_group_add (ClutterContainer *self,
       gfloat            w, h;
 
       clutter_actor_get_size (actor, &w, &h);
+
+      w /= group->priv->scale;
+      h /= group->priv->scale;
+
       shape = new btBox2dShape (btVector3 (w / 2, h / 2, 0));
       shape->calculateLocalInertia (0, tensor);
 
       btRigidBody *body = new btRigidBody (
         btRigidBody::btRigidBodyConstructionInfo (
-          0, new ClutterBulletMotionState (actor), shape, tensor
+          0,
+          new ClutterBulletMotionState (actor, group->priv->scale),
+          shape,
+          tensor
         )
       );
 
@@ -344,7 +352,7 @@ clutter_bullet_group_remove (ClutterContainer *self,
 
     clutter_bullet_actor_unbind (binder, group);
 
-    container->remove (self, child);
+    parent_container->remove (self, child == NULL ? actor : child);
   }
   else
   {
@@ -362,7 +370,7 @@ clutter_bullet_group_remove (ClutterContainer *self,
       delete body;
     }
 
-    container->remove (self, actor);
+    parent_container->remove (self, actor);
   }
 }
 

@@ -29,7 +29,8 @@ class ClutterBulletMotionState : public btMotionState
 {
   public:
 
-  explicit     ClutterBulletMotionState (ClutterActor      *a);
+  explicit     ClutterBulletMotionState (ClutterActor      *a,
+                                         gdouble            s);
 
   virtual void getWorldTransform        (btTransform       &t) const;
 
@@ -38,6 +39,8 @@ class ClutterBulletMotionState : public btMotionState
   private:
 
   ClutterActor *actor;
+
+  gdouble       scale;
 };
 
 
