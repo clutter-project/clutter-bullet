@@ -138,6 +138,18 @@ clutter_bullet_actor_iface_init (ClutterBulletActorInterface *iface,
 
 
 
+ClutterActor *
+clutter_bullet_card_new (ClutterActor *actor,
+                         gdouble       mass)
+{
+  return CLUTTER_ACTOR (g_object_new (CLUTTER_BULLET_TYPE_CARD,
+                                      "actor", actor,
+                                      "mass", mass,
+                                      NULL));
+}
+
+
+
 static void
 clutter_bullet_card_get_property (GObject    *obj,
                                   guint       key,
@@ -219,6 +231,8 @@ clutter_bullet_card_bind (ClutterBulletActor *self,
       tensor
     )
   );
+
+  clutter_bullet_group_get_world (group)->addRigidBody (card->priv->body);
 }
 
 
@@ -231,6 +245,8 @@ clutter_bullet_card_unbind (ClutterBulletActor *self,
 
   if (card->priv->body != NULL)
   {
+    clutter_bullet_group_get_world (group)->removeRigidBody (card->priv->body);
+
     delete card->priv->body->getCollisionShape ();
     delete card->priv->body->getMotionState ();
     delete card->priv->body;

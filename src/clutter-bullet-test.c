@@ -35,16 +35,32 @@ int
 main (int   argc,
       char *argv[])
 {
-  ClutterColor bg = { 0, 0, 0, 255 };
+  ClutterColor colour[] = {
+    { 0, 0, 0, 255 },
+    { 255, 0, 0, 255 },
+    { 0, 255, 0, 255 },
+    { 0, 0, 255, 255 }
+  };
+
+  ClutterActor *actor = NULL;
 
   clutter_init (&argc, &argv);
 
   stage = clutter_stage_get_default ();
-  clutter_stage_set_color (CLUTTER_STAGE (stage), &bg);
+  clutter_stage_set_color (CLUTTER_STAGE (stage), colour);
   clutter_actor_show_all (stage);
 
   group = clutter_bullet_group_new (100);
   clutter_container_add_actor (CLUTTER_CONTAINER (stage), group);
+
+  actor = clutter_rectangle_new_with_color (colour + 1);
+  clutter_actor_set_position (actor, 30, 30);
+  clutter_actor_set_depth (actor, -50);
+  clutter_actor_set_size (actor, 200, 100);
+  actor = clutter_bullet_card_new (actor, 1);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor);
+
+  clutter_bullet_group_start (CLUTTER_BULLET_GROUP (group));
 
   clutter_main ();
 

@@ -25,6 +25,7 @@
 
 
 
+#include "clutter-bullet-card.h"
 #include "clutter-bullet-group.h"
 
 

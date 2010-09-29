@@ -45,7 +45,7 @@ clutter_bullet_actor_default_init (ClutterBulletActorInterface *klass)
                                 "Target actor",
                                 "Target actor to add to group",
                                 CLUTTER_TYPE_ACTOR,
-                                (GParamFlags) (G_PARAM_READABLE |
+                                (GParamFlags) (G_PARAM_READWRITE |
                                                G_PARAM_CONSTRUCT_ONLY));
 
     g_object_interface_install_property (klass, spec);

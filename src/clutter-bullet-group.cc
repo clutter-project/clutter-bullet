@@ -115,6 +115,7 @@ clutter_bullet_group_init (ClutterBulletGroup *self)
 
   self->priv->solver = NULL;
   self->priv->world  = new btDiscreteDynamicsWorld (dispatch, broadphase, self->priv->solver, self->priv->config);
+  self->priv->world->setGravity (btVector3 (0, 9.8, 0));
 
   self->priv->body = g_hash_table_new (NULL, NULL);
 
@@ -145,7 +146,7 @@ clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
                               G_MINDOUBLE,
                               G_MAXDOUBLE,
                               1,
-                              (GParamFlags) (G_PARAM_READABLE |
+                              (GParamFlags) (G_PARAM_READWRITE |
                                              G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (glass, PROP_SCALE, spec);
@@ -177,9 +178,9 @@ clutter_container_iface_init (ClutterContainerIface *iface,
 ClutterActor *
 clutter_bullet_group_new (gdouble scale)
 {
-  return (ClutterActor *) g_object_new (CLUTTER_BULLET_TYPE_GROUP,
-                                        "scale", scale,
-                                        NULL);
+  return CLUTTER_ACTOR (g_object_new (CLUTTER_BULLET_TYPE_GROUP,
+                                      "scale", scale,
+                                      NULL));
 }
 
 
@@ -260,6 +261,14 @@ clutter_bullet_group_set_property (GObject      *obj,
 
 
 
+btDynamicsWorld *
+clutter_bullet_group_get_world (ClutterBulletGroup *self)
+{
+  return self->priv->world;
+}
+
+
+
 void
 clutter_bullet_group_start (ClutterBulletGroup *self)
 {
@@ -268,7 +277,7 @@ clutter_bullet_group_start (ClutterBulletGroup *self)
 
   g_get_current_time (&self->priv->time);
 
-  self->priv->timer = clutter_threads_add_repaint_func (clutter_bullet_group_update, self, NULL);
+  self->priv->timer = clutter_frame_source_add (60, clutter_bullet_group_update, self);
 }
 
 
@@ -278,8 +287,6 @@ clutter_bullet_group_stop (ClutterBulletGroup *self)
 {
   if (!self->priv->timer)
     return;
-
-  clutter_threads_remove_repaint_func (self->priv->timer);
 
   self->priv->timer        = 0;
   self->priv->time.tv_sec  = 0;
@@ -382,6 +389,9 @@ clutter_bullet_group_update (gpointer data)
   ClutterBulletGroup *self  = (ClutterBulletGroup *) data;
   gdouble             delta = 0;
   GTimeVal            time;
+
+  if (!self->priv->timer)
+    return FALSE;
 
   g_get_current_time (&time);
 

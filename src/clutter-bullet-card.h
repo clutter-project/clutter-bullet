@@ -61,6 +61,11 @@ struct _ClutterBulletCardClass
 
 
 
+ClutterActor * clutter_bullet_card_new (ClutterActor *actor,
+                                        gdouble       mass);
+
+
+
 G_END_DECLS
 
 
