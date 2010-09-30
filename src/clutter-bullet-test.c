@@ -54,11 +54,20 @@ main (int   argc,
   clutter_container_add_actor (CLUTTER_CONTAINER (stage), group);
 
   actor = clutter_rectangle_new_with_color (colour + 1);
-  clutter_actor_set_position (actor, 30, 30);
-  clutter_actor_set_depth (actor, -50);
+  clutter_actor_set_position (actor, 150, 0);
+  clutter_actor_set_depth (actor, 0);
   clutter_actor_set_size (actor, 200, 100);
   actor = clutter_bullet_card_new (actor, 1);
   clutter_container_add_actor (CLUTTER_CONTAINER (group), actor);
+
+  /*
+  actor = clutter_rectangle_new_with_color (colour + 2);
+  clutter_actor_set_position (actor, 0, 250);
+  clutter_actor_set_depth (actor, 0);
+  clutter_actor_set_size (actor, 200, 100);
+  clutter_actor_set_rotation (actor, CLUTTER_X_AXIS, 80, 100, 50, 0);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor);
+  */
 
   clutter_bullet_group_start (CLUTTER_BULLET_GROUP (group));
 
