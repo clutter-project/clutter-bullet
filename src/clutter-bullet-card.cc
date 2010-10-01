@@ -43,6 +43,7 @@ struct _ClutterBulletCardPrivate
   btRigidBody  *body;
 
   gdouble       mass;
+  gdouble       margin;
 };
 
 
@@ -51,7 +52,8 @@ enum
 {
   PROP_0,
   PROP_ACTOR,
-  PROP_MASS
+  PROP_MASS,
+  PROP_MARGIN
 };
 
 
@@ -94,9 +96,10 @@ clutter_bullet_card_init (ClutterBulletCard *self)
 {
   self->priv = CLUTTER_BULLET_CARD_GET_PRIVATE (self);
 
-  self->priv->actor = NULL;
-  self->priv->body  = NULL;
-  self->priv->mass  = 1;
+  self->priv->actor  = NULL;
+  self->priv->body   = NULL;
+  self->priv->mass   = 1;
+  self->priv->margin = CONVEX_DISTANCE_MARGIN;
 }
 
 
@@ -124,6 +127,17 @@ clutter_bullet_card_class_init (ClutterBulletCardClass *klass)
                                              G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (glass, PROP_MASS, spec);
+
+  spec = g_param_spec_double ("margin",
+                              "Object margin",
+                              "Penetration allowance in metres",
+                              G_MINDOUBLE,
+                              G_MAXDOUBLE,
+                              CONVEX_DISTANCE_MARGIN,
+                              (GParamFlags) (G_PARAM_READWRITE |
+                                             G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (glass, PROP_MARGIN, spec);
 }
 
 
@@ -168,6 +182,10 @@ clutter_bullet_card_get_property (GObject    *obj,
       g_value_set_double (val, self->priv->mass);
       break;
 
+    case PROP_MARGIN:
+      g_value_set_double (val, self->priv->margin);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, key, spec);
       break;
@@ -192,6 +210,10 @@ clutter_bullet_card_set_property (GObject      *obj,
 
     case PROP_MASS:
       self->priv->mass = g_value_get_double (val);
+      break;
+
+    case PROP_MARGIN:
+      self->priv->margin = g_value_get_double (val);
       break;
 
     default:
@@ -220,7 +242,11 @@ clutter_bullet_card_bind (ClutterBulletActor *self,
   w /= scale;
   h /= scale;
 
-  shape = new btBox2dShape (btVector3 (w / 2, h / 2, 0));
+  shape = new btBox2dShape (btVector3 (card->priv->margin + w / 2,
+                                       card->priv->margin + h / 2,
+                                       card->priv->margin));
+
+  shape->setMargin (card->priv->margin);
   shape->calculateLocalInertia (card->priv->mass, tensor);
 
   card->priv->body = new btRigidBody (

@@ -326,6 +326,8 @@ clutter_bullet_group_add (ClutterContainer *self,
       h /= group->priv->scale;
 
       shape = new btBox2dShape (btVector3 (w / 2, h / 2, 0));
+
+      shape->setMargin (0);
       shape->calculateLocalInertia (0, tensor);
 
       btRigidBody *body = new btRigidBody (
