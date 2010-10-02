@@ -58,7 +58,11 @@ struct _ClutterBulletGroup
 
 struct _ClutterBulletGroupClass
 {
-  ClutterGroupClass parent;
+  ClutterGroupClass   parent;
+
+  void              (*start) (ClutterBulletGroup *);
+
+  void              (*stop)  (ClutterBulletGroup *);
 };
 
 

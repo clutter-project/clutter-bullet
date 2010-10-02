@@ -86,6 +86,10 @@ static void     clutter_bullet_group_add          (ClutterContainer      *self,
 static void     clutter_bullet_group_remove       (ClutterContainer      *self,
                                                    ClutterActor          *actor);
 
+static void     clutter_bullet_group_real_start   (ClutterBulletGroup    *self);
+
+static void     clutter_bullet_group_real_stop    (ClutterBulletGroup    *self);
+
 static gboolean clutter_bullet_group_update       (gpointer               data);
 
 static void     clutter_bullet_group_finalize     (GObject               *obj);
@@ -139,6 +143,8 @@ clutter_bullet_group_class_init (ClutterBulletGroupClass *klass)
   glass->get_property = clutter_bullet_group_get_property;
   glass->set_property = clutter_bullet_group_set_property;
   glass->finalize     = clutter_bullet_group_finalize;
+  klass->start        = clutter_bullet_group_real_start;
+  klass->stop         = clutter_bullet_group_real_stop;
 
   spec = g_param_spec_double ("scale",
                               "Scaling factor",
@@ -269,32 +275,6 @@ clutter_bullet_group_get_world (ClutterBulletGroup *self)
 
 
 
-void
-clutter_bullet_group_start (ClutterBulletGroup *self)
-{
-  if (self->priv->timer)
-    return;
-
-  g_get_current_time (&self->priv->time);
-
-  self->priv->timer = clutter_frame_source_add (60, clutter_bullet_group_update, self);
-}
-
-
-
-void
-clutter_bullet_group_stop (ClutterBulletGroup *self)
-{
-  if (!self->priv->timer)
-    return;
-
-  self->priv->timer        = 0;
-  self->priv->time.tv_sec  = 0;
-  self->priv->time.tv_usec = 0;
-}
-
-
-
 static void
 clutter_bullet_group_add (ClutterContainer *self,
                           ClutterActor     *actor)
@@ -381,6 +361,48 @@ clutter_bullet_group_remove (ClutterContainer *self,
 
     parent_container->remove (self, actor);
   }
+}
+
+
+
+void
+clutter_bullet_group_start (ClutterBulletGroup *self)
+{
+  CLUTTER_BULLET_GROUP_GET_CLASS (self)->start (self);
+}
+
+
+
+static void
+clutter_bullet_group_real_start (ClutterBulletGroup *self)
+{
+  if (self->priv->timer)
+    return;
+
+  g_get_current_time (&self->priv->time);
+
+  self->priv->timer = clutter_frame_source_add (60, clutter_bullet_group_update, self);
+}
+
+
+
+void
+clutter_bullet_group_stop (ClutterBulletGroup *self)
+{
+  CLUTTER_BULLET_GROUP_GET_CLASS (self)->stop (self);
+}
+
+
+
+static void
+clutter_bullet_group_real_stop (ClutterBulletGroup *self)
+{
+  if (!self->priv->timer)
+    return;
+
+  self->priv->timer        = 0;
+  self->priv->time.tv_sec  = 0;
+  self->priv->time.tv_usec = 0;
 }
 
 

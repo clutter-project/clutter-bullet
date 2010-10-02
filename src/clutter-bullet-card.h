@@ -61,8 +61,12 @@ struct _ClutterBulletCardClass
 
 
 
-ClutterActor * clutter_bullet_card_new (ClutterActor *actor,
-                                        gdouble       mass);
+ClutterActor * clutter_bullet_card_new             (ClutterActor *actor,
+                                                    gdouble       mass);
+
+ClutterActor * clutter_bullet_card_new_with_margin (ClutterActor *actor,
+                                                    gdouble       mass,
+                                                    gdouble       margin);
 
 
 

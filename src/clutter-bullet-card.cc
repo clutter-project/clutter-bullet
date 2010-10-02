@@ -164,6 +164,20 @@ clutter_bullet_card_new (ClutterActor *actor,
 
 
 
+ClutterActor *
+clutter_bullet_card_new_with_margin (ClutterActor *actor,
+                                     gdouble       mass,
+                                     gdouble       margin)
+{
+  return CLUTTER_ACTOR (g_object_new (CLUTTER_BULLET_TYPE_CARD,
+                                      "actor", actor,
+                                      "mass", mass,
+                                      "margin", margin,
+                                      NULL));
+}
+
+
+
 static void
 clutter_bullet_card_get_property (GObject    *obj,
                                   guint       key,
