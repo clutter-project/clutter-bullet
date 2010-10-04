@@ -25,10 +25,7 @@
 #include "clutter-bullet-group.h"
 #include "clutter-bullet-actor.h"
 
-#include <BulletCollision/CollisionShapes/btBox2dShape.h>
 #include <btBulletDynamicsCommon.h>
-
-#include "clutter-bullet-private.h"
 
 
 
@@ -41,8 +38,6 @@ struct _ClutterBulletGroupPrivate
   btDynamicsWorld          *world;
   btConstraintSolver       *solver;
   btCollisionConfiguration *config;
-
-  GHashTable               *body;
 
   guint                     timer;
   GTimeVal                  time;
@@ -120,8 +115,6 @@ clutter_bullet_group_init (ClutterBulletGroup *self)
   self->priv->solver = NULL;
   self->priv->world  = new btDiscreteDynamicsWorld (dispatch, broadphase, self->priv->solver, self->priv->config);
   self->priv->world->setGravity (btVector3 (0, 9.8, 0));
-
-  self->priv->body = g_hash_table_new (NULL, NULL);
 
   self->priv->timer        = 0;
   self->priv->time.tv_sec  = 0;
@@ -275,55 +268,21 @@ clutter_bullet_group_get_world (ClutterBulletGroup *self)
 
 
 
+gdouble
+clutter_bullet_group_get_scale (ClutterBulletGroup *self)
+{
+  return self->priv->scale;
+}
+
+
+
 static void
 clutter_bullet_group_add (ClutterContainer *self,
                           ClutterActor     *actor)
 {
-  ClutterBulletGroup *group = CLUTTER_BULLET_GROUP (self);
+  parent_container->add (self, clutter_bullet_actor_get_actor (actor));
 
-  if (CLUTTER_BULLET_IS_ACTOR (actor))
-  {
-    ClutterBulletActor *binder = CLUTTER_BULLET_ACTOR (actor);
-    ClutterActor       *child  = clutter_bullet_actor_get_actor (binder);
-
-    parent_container->add (self, child == NULL ? actor : child);
-
-    clutter_bullet_actor_bind (binder, group);
-  }
-  else
-  {
-    parent_container->add (self, actor);
-
-    if (g_hash_table_lookup (group->priv->body, actor) == NULL)
-    {
-      btCollisionShape *shape;
-      btVector3         tensor;
-      gfloat            w, h;
-
-      clutter_actor_get_size (actor, &w, &h);
-
-      w /= group->priv->scale;
-      h /= group->priv->scale;
-
-      shape = new btBox2dShape (btVector3 (w / 2, h / 2, 0));
-
-      shape->setMargin (0);
-      shape->calculateLocalInertia (0, tensor);
-
-      btRigidBody *body = new btRigidBody (
-        btRigidBody::btRigidBodyConstructionInfo (
-          0,
-          new ClutterBulletMotionState (actor, group->priv->scale),
-          shape,
-          tensor
-        )
-      );
-
-      group->priv->world->addRigidBody (body);
-
-      g_hash_table_replace (group->priv->body, actor, body);
-    }
-  }
+  clutter_bullet_actor_bind (actor, CLUTTER_BULLET_GROUP (self));
 }
 
 
@@ -332,35 +291,9 @@ static void
 clutter_bullet_group_remove (ClutterContainer *self,
                              ClutterActor     *actor)
 {
-  ClutterBulletGroup *group = CLUTTER_BULLET_GROUP (self);
+  clutter_bullet_actor_unbind (actor, CLUTTER_BULLET_GROUP (self));
 
-  if (CLUTTER_BULLET_IS_ACTOR (actor))
-  {
-    ClutterBulletActor *binder = CLUTTER_BULLET_ACTOR (actor);
-    ClutterActor       *child  = clutter_bullet_actor_get_actor (binder);
-
-    clutter_bullet_actor_unbind (binder, group);
-
-    parent_container->remove (self, child == NULL ? actor : child);
-  }
-  else
-  {
-    gpointer     obj  = g_hash_table_lookup (group->priv->body, actor);
-    btRigidBody *body = (btRigidBody *) obj;
-
-    if (body != NULL)
-    {
-      g_hash_table_remove (group->priv->body, actor);
-
-      group->priv->world->removeRigidBody (body);
-
-      delete body->getCollisionShape ();
-      delete body->getMotionState ();
-      delete body;
-    }
-
-    parent_container->remove (self, actor);
-  }
+  parent_container->remove (self, clutter_bullet_actor_get_actor (actor));
 }
 
 
@@ -440,8 +373,6 @@ clutter_bullet_group_finalize (GObject *obj)
   clutter_bullet_group_stop (self);
 
   clutter_group_remove_all (CLUTTER_GROUP (obj));
-
-  g_hash_table_destroy (self->priv->body);
 
   btDispatcher          *dispatch   = self->priv->world->getDispatcher ();
   btBroadphaseInterface *broadphase = self->priv->world->getBroadphase ();

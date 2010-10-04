@@ -52,6 +52,7 @@ enum
 {
   PROP_0,
   PROP_ACTOR,
+  PROP_BODY,
   PROP_MASS,
   PROP_MARGIN
 };
@@ -116,6 +117,7 @@ clutter_bullet_card_class_init (ClutterBulletCardClass *klass)
   glass->set_property = clutter_bullet_card_set_property;
 
   g_object_class_override_property (glass, PROP_ACTOR, "actor");
+  g_object_class_override_property (glass, PROP_BODY, "body");
 
   spec = g_param_spec_double ("mass",
                               "Object mass",
@@ -192,6 +194,10 @@ clutter_bullet_card_get_property (GObject    *obj,
       g_value_set_object (val, self->priv->actor);
       break;
 
+    case PROP_BODY:
+      g_value_set_pointer (val, self->priv->body);
+      break;
+
     case PROP_MASS:
       g_value_set_double (val, self->priv->mass);
       break;
@@ -222,6 +228,10 @@ clutter_bullet_card_set_property (GObject      *obj,
       self->priv->actor = (ClutterActor *) g_value_get_object (val);
       break;
 
+    case PROP_BODY:
+      self->priv->body = (btRigidBody *) g_value_get_pointer (val);
+      break;
+
     case PROP_MASS:
       self->priv->mass = g_value_get_double (val);
       break;
@@ -249,7 +259,7 @@ clutter_bullet_card_bind (ClutterBulletActor *self,
   gdouble           scale;
   gfloat            w, h;
 
-  g_object_get (group, "scale", &scale, NULL);
+  scale = clutter_bullet_group_get_scale (group);
 
   clutter_actor_get_size (card->priv->actor, &w, &h);
 

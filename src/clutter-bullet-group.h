@@ -73,6 +73,8 @@ ClutterActor *    clutter_bullet_group_new       (gdouble             scale);
 
 btDynamicsWorld * clutter_bullet_group_get_world (ClutterBulletGroup *self);
 
+gdouble           clutter_bullet_group_get_scale (ClutterBulletGroup *self);
+
 void              clutter_bullet_group_start     (ClutterBulletGroup *self);
 
 void              clutter_bullet_group_stop      (ClutterBulletGroup *self);
