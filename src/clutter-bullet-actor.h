@@ -43,6 +43,8 @@ G_BEGIN_DECLS
 typedef struct _ClutterBulletActor          ClutterBulletActor;
 typedef struct _ClutterBulletActorInterface ClutterBulletActorInterface;
 
+typedef struct btRigidBody                  btRigidBody;
+
 
 
 struct _ClutterBulletActorInterface
@@ -61,6 +63,8 @@ struct _ClutterBulletActorInterface
 GType          clutter_bullet_actor_get_type  (void);
 
 ClutterActor * clutter_bullet_actor_get_actor (ClutterActor       *self);
+
+btRigidBody *  clutter_bullet_actor_get_body  (ClutterActor       *self);
 
 void           clutter_bullet_actor_bind      (ClutterActor       *self,
                                                ClutterBulletGroup *group);

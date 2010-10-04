@@ -90,6 +90,21 @@ clutter_bullet_actor_get_actor (ClutterActor *self)
 
 
 
+btRigidBody *
+clutter_bullet_actor_get_body (ClutterActor *self)
+{
+  btRigidBody *body;
+
+  if (CLUTTER_BULLET_IS_ACTOR (self))
+    g_object_get (self, "body", &body, NULL);
+  else
+    body = (btRigidBody *) g_hash_table_lookup (actor_body, self);
+
+  return body;
+}
+
+
+
 void
 clutter_bullet_actor_bind (ClutterActor       *self,
                            ClutterBulletGroup *group)
@@ -124,7 +139,7 @@ clutter_bullet_actor_bind (ClutterActor       *self,
       shape->setMargin (0);
       shape->calculateLocalInertia (0, tensor);
 
-      btRigidBody *b = new btRigidBody (
+      btRigidBody *body = new btRigidBody (
         btRigidBody::btRigidBodyConstructionInfo (
           0,
           new ClutterBulletMotionState (self, scale),
@@ -133,9 +148,9 @@ clutter_bullet_actor_bind (ClutterActor       *self,
         )
       );
 
-      clutter_bullet_group_get_world (group)->addRigidBody (b);
+      clutter_bullet_group_get_world (group)->addRigidBody (body);
 
-      g_hash_table_replace (actor_body, self, b);
+      g_hash_table_replace (actor_body, self, body);
     }
   }
 }
@@ -154,20 +169,20 @@ clutter_bullet_actor_unbind (ClutterActor       *self,
   }
   else
   {
-    btRigidBody *b;
+    btRigidBody *body;
 
     if (actor_body == NULL)
       actor_body = g_hash_table_new (NULL, NULL);
 
-    if ((b = (btRigidBody *) g_hash_table_lookup (actor_body, self)) != NULL)
+    if ((body = (btRigidBody *) g_hash_table_lookup (actor_body, self)) != NULL)
     {
       g_hash_table_remove (actor_body, self);
 
-      clutter_bullet_group_get_world (group)->removeRigidBody (b);
+      clutter_bullet_group_get_world (group)->removeRigidBody (body);
 
-      delete b->getCollisionShape ();
-      delete b->getMotionState ();
-      delete b;
+      delete body->getCollisionShape ();
+      delete body->getMotionState ();
+      delete body;
     }
   }
 }
