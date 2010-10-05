@@ -225,7 +225,7 @@ clutter_bullet_card_set_property (GObject      *obj,
   switch (key)
   {
     case PROP_ACTOR:
-      self->priv->actor = (ClutterActor *) g_value_get_object (val);
+      self->priv->actor = CLUTTER_ACTOR (g_value_get_object (val));
       break;
 
     case PROP_BODY:

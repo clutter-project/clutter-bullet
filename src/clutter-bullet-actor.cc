@@ -31,7 +31,28 @@
 
 
 
+typedef struct _ClutterBulletActorBinder ClutterBulletActorBinder;
+
+
+
+struct _ClutterBulletActorBinder
+{
+  gulong              signal;
+
+  ClutterActor       *actor;
+
+  ClutterBulletGroup *group;
+};
+
+
+
 static GHashTable *actor_body;
+
+
+
+static void clutter_bullet_actor_real_bind (GObject    *obj,
+                                            GParamSpec *spec,
+                                            gpointer    data);
 
 
 
@@ -109,6 +130,33 @@ void
 clutter_bullet_actor_bind (ClutterActor       *self,
                            ClutterBulletGroup *group)
 {
+  ClutterBulletActorBinder *binder = new ClutterBulletActorBinder;
+
+  binder->actor = self;
+  binder->group = group;
+
+  binder->signal = g_signal_connect (clutter_bullet_actor_get_actor (self),
+                                     "notify::allocation",
+                                     G_CALLBACK (clutter_bullet_actor_real_bind),
+                                     binder);
+}
+
+
+
+static void
+clutter_bullet_actor_real_bind (GObject    *obj,
+                                GParamSpec *spec,
+                                gpointer    data)
+{
+  if (!clutter_actor_has_allocation (CLUTTER_ACTOR (obj)))
+    return;
+
+  ClutterBulletActorBinder *binder = (ClutterBulletActorBinder *) data;
+  ClutterActor             *self   = binder->actor;
+  ClutterBulletGroup       *group  = binder->group;
+
+  g_signal_handler_disconnect (obj, binder->signal);
+
   if (CLUTTER_BULLET_IS_ACTOR (self))
   {
     ClutterBulletActor *actor = CLUTTER_BULLET_ACTOR (self);
@@ -153,6 +201,8 @@ clutter_bullet_actor_bind (ClutterActor       *self,
       g_hash_table_replace (actor_body, self, body);
     }
   }
+
+  delete binder;
 }
 
 

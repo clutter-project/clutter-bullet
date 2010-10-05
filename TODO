@@ -1,1 +1,1 @@
-1. attach to an allocation-changed signal to update the btRigidBody
+1. following bind with unbind is a Very Bad Thing
