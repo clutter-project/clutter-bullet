@@ -1,1 +1,4 @@
 1. following bind with unbind is a Very Bad Thing
+
+   this is because the notification handler on the allocation property is still
+   pending, and in the very best case, the callback data is a leak
