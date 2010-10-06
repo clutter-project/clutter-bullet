@@ -20,6 +20,8 @@
 
 
 
+#include <cmath>
+
 #include <clutter/clutter.h>
 
 #include <btBulletDynamicsCommon.h>
@@ -30,6 +32,13 @@
 
 #define DEG(x) (180 / M_PI * (x))
 #define RAD(x) (M_PI / 180 * (x))
+
+
+
+static void clutter_bullet_get_euler_angles (const btMatrix3x3 *a,
+                                             gdouble           *x,
+                                             gdouble           *y,
+                                             gdouble           *z);
 
 
 
@@ -75,19 +84,14 @@ ClutterBulletMotionState::setWorldTransform (const btTransform &t)
 {
   CoglMatrix    a;
   ClutterVertex x, dx;
-  btScalar      rx0, ry0, rz0;
-  gdouble       rx1, ry1, rz1;
+  gdouble       rx, ry, rz;
   gfloat        w, z;
 
-  t.getBasis ().getEulerZYX (rz0, ry0, rx0);
+  clutter_bullet_get_euler_angles (&t.getBasis (), &rx, &ry, &rz);
 
-  rx1 = DEG (rx0);
-  ry1 = DEG (ry0);
-  rz1 = DEG (rz0);
-
-  g_object_set (actor, "rotation-angle-x", rx1,
-                       "rotation-angle-y", ry1,
-                       "rotation-angle-z", rz1, NULL);
+  g_object_set (actor, "rotation-angle-x", DEG (rx),
+                       "rotation-angle-y", DEG (ry),
+                       "rotation-angle-z", DEG (rz), NULL);
 
   clutter_actor_get_size (actor, &x.x, &x.y);
   clutter_actor_get_transformation_matrix (actor, &a);
@@ -105,4 +109,32 @@ ClutterBulletMotionState::setWorldTransform (const btTransform &t)
 
   clutter_actor_move_by (actor, dx.x, dx.y);
   clutter_actor_set_depth (actor, clutter_actor_get_depth (actor) + dx.z);
+}
+
+
+
+static void
+clutter_bullet_get_euler_angles (const btMatrix3x3 *a,
+                                 gdouble           *x,
+                                 gdouble           *y,
+                                 gdouble           *z)
+{
+  if ((*a)[2][0] <= -1)
+  {
+    *x = atan2 ((*a)[0][1], (*a)[0][2]);
+    *y = M_PI / 2;
+    *z = 0;
+  }
+  else if ((*a)[2][0] < 1)
+  {
+    *x = atan2 ((*a)[2][1], (*a)[2][2]);
+    *y = asin (-(*a)[2][0]);
+    *z = atan2 ((*a)[1][0], (*a)[0][0]);
+  }
+  else
+  {
+    *x = atan2 (-(*a)[0][1], -(*a)[0][2]);
+    *y = -M_PI / 2;
+    *z = 0;
+  }
 }
