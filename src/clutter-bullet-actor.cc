@@ -61,7 +61,7 @@ static void clutter_bullet_actor_real_bind (GObject    *obj,
 G_DEFINE_INTERFACE (
   ClutterBulletActor,
   clutter_bullet_actor,
-  G_TYPE_INVALID
+  CLUTTER_TYPE_ACTOR
 );
 
 
