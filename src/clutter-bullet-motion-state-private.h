@@ -20,8 +20,8 @@
 
 
 
-#ifndef __CLUTTER_BULLET_PRIVATE_H__
-#define __CLUTTER_BULLET_PRIVATE_H__
+#ifndef __CLUTTER_BULLET_MOTION_STATE_PRIVATE_H__
+#define __CLUTTER_BULLET_MOTION_STATE_PRIVATE_H__
 
 
 
@@ -45,4 +45,4 @@ class ClutterBulletMotionState : public btMotionState
 
 
 
-#endif /* __CLUTTER_BULLET_PRIVATE_H__ */
+#endif /* __CLUTTER_BULLET_MOTION_STATE_PRIVATE_H__ */
