@@ -27,7 +27,7 @@
 #include <BulletCollision/CollisionShapes/btBox2dShape.h>
 #include <btBulletDynamicsCommon.h>
 
-#include "clutter-bullet-private.h"
+#include "clutter-bullet-motion-state-private.h"
 
 
 

@@ -26,7 +26,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include "clutter-bullet-private.h"
+#include "clutter-bullet-motion-state-private.h"
 
 
 
