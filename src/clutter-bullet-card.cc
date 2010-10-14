@@ -226,18 +226,22 @@ clutter_bullet_card_set_property (GObject      *obj,
   {
     case PROP_ACTOR:
       self->priv->actor = CLUTTER_ACTOR (g_value_get_object (val));
+      g_object_notify (obj, "actor");
       break;
 
     case PROP_BODY:
       self->priv->body = (btRigidBody *) g_value_get_pointer (val);
+      g_object_notify (obj, "body");
       break;
 
     case PROP_MASS:
       self->priv->mass = g_value_get_double (val);
+      g_object_notify (obj, "mass");
       break;
 
     case PROP_MARGIN:
       self->priv->margin = g_value_get_double (val);
+      g_object_notify (obj, "margin");
       break;
 
     default:

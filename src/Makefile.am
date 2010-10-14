@@ -4,6 +4,7 @@ AM_CFLAGS   = # -ansi -pedantic -Wall
 CLUTTER_BULLET = clutter-bullet-actor.cc        \
                  clutter-bullet-card.cc         \
                  clutter-bullet-group.cc        \
+                 clutter-bullet-joint.cc        \
                  clutter-bullet-motion-state.cc
 
 bin_PROGRAMS = clutter-bullet-test

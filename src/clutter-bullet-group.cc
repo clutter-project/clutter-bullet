@@ -234,6 +234,7 @@ clutter_bullet_group_set_property (GObject      *obj,
   {
     case PROP_SCALE:
       self->priv->scale = g_value_get_double (val);
+      g_object_notify (obj, "scale");
       break;
 
     case PROP_GRAVITY:
@@ -247,6 +248,7 @@ clutter_bullet_group_set_property (GObject      *obj,
           gravity /= self->priv->scale;
 
           self->priv->world->setGravity (gravity);
+          g_object_notify (obj, "gravity");
         }
       }
 

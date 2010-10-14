@@ -46,9 +46,9 @@ struct _ClutterBulletActorBinder
 
 
 
-static GHashTable *actor_binder;
+static GHashTable *actor_binder = NULL;
 
-static GHashTable *actor_body;
+static GHashTable *actor_body   = NULL;
 
 
 
@@ -185,6 +185,8 @@ clutter_bullet_actor_real_bind (GObject    *obj,
     ClutterBulletActor *actor = CLUTTER_BULLET_ACTOR (self);
 
     CLUTTER_BULLET_ACTOR_GET_INTERFACE (actor)->bind (actor, group);
+
+    g_object_notify (G_OBJECT (self), "body");
   }
   else
   {
@@ -249,6 +251,8 @@ clutter_bullet_actor_unbind (ClutterActor       *self,
     ClutterBulletActor *actor = CLUTTER_BULLET_ACTOR (self);
 
     CLUTTER_BULLET_ACTOR_GET_INTERFACE (actor)->unbind (actor, group);
+
+    g_object_notify (G_OBJECT (self), "body");
   }
   else
   {
