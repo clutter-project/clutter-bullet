@@ -1,3 +1,6 @@
-1. figure out how to register a callback for when a non-
-   ClutterBulletActor receives a new btRigidBody
-2. implement the listening for all bodies to be ready
+-1. finished fixing ClutterBulletGroup add + bind
+ 0. fix ClutterBulletGroup remove
+ 1. disable callbacks if removed before bound
+ 2. check and emit notify signal on body in ClutterBulletActor
+ 3. add dictionary lookup of btRigidBody for non-ClutterBulletActors
+ 4. figure out this signal order independence works...

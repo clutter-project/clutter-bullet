@@ -62,7 +62,7 @@ struct _ClutterBulletActorInterface
 
 GType          clutter_bullet_actor_get_type  (void);
 
-ClutterActor * clutter_bullet_actor_get_actor (ClutterActor       *self);
+ClutterActor * clutter_bullet_actor_get_actor (ClutterBulletActor *self);
 
 btRigidBody *  clutter_bullet_actor_get_body  (ClutterActor       *self);
 

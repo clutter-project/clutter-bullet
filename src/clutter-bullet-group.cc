@@ -33,6 +33,10 @@
 
 
 
+typedef struct _ClutterBulletGroupInfo ClutterBulletGroupInfo;
+
+
+
 struct _ClutterBulletGroupPrivate
 {
   btDynamicsWorld          *world;
@@ -45,6 +49,16 @@ struct _ClutterBulletGroupPrivate
   gdouble                   step;
 
   gdouble                   scale;
+};
+
+
+
+struct _ClutterBulletGroupInfo
+{
+  ClutterBulletGroup *group;
+  ClutterActor       *actor;
+
+  gulong              signal;
 };
 
 
@@ -77,6 +91,10 @@ static void     clutter_bullet_group_set_property (GObject               *obj,
 
 static void     clutter_bullet_group_add          (ClutterContainer      *self,
                                                    ClutterActor          *actor);
+
+static void     clutter_bullet_group_bind         (GObject               *obj,
+                                                   GParamSpec            *spec,
+                                                   gpointer               data);
 
 static void     clutter_bullet_group_remove       (ClutterContainer      *self,
                                                    ClutterActor          *actor);
@@ -282,9 +300,93 @@ static void
 clutter_bullet_group_add (ClutterContainer *self,
                           ClutterActor     *actor)
 {
-  parent_container->add (self, clutter_bullet_actor_get_actor (actor));
+  ClutterActor *child = actor;
 
-  clutter_bullet_actor_bind (actor, CLUTTER_BULLET_GROUP (self));
+  if (CLUTTER_BULLET_IS_ACTOR (actor))
+  {
+    ClutterBulletActor *shell = CLUTTER_BULLET_ACTOR (actor);
+
+    child = clutter_bullet_actor_get_actor (shell);
+
+    if (child == NULL)
+      child = actor;
+  }
+
+  parent_container->add (self, child);
+
+  ClutterBulletGroupInfo *info = new ClutterBulletGroupInfo;
+
+  info->group  = CLUTTER_BULLET_GROUP (self);
+  info->actor  = actor;
+  info->signal = 0;
+
+  if (clutter_actor_has_allocation (child))
+  {
+    const gchar  *name  = "allocation";
+    GObjectClass *klass = G_OBJECT_GET_CLASS (child);
+    GParamSpec   *spec  = g_object_class_find_property (klass, name);
+
+    clutter_bullet_group_bind (G_OBJECT (child), spec, info);
+  }
+  else
+  {
+    const gchar *name = "notify::allocation";
+    GCallback    call = G_CALLBACK (clutter_bullet_group_bind);
+
+    info->signal = g_signal_connect (child, name, call, info);
+  }
+}
+
+
+
+static void
+clutter_bullet_group_bind (GObject    *obj,
+                           GParamSpec *spec,
+                           gpointer    data)
+{
+  ClutterActor *child = CLUTTER_ACTOR (obj);
+
+  if (!clutter_actor_has_allocation (child))
+    return;
+
+  ClutterBulletGroupInfo *info  = (ClutterBulletGroupInfo *) data;
+  ClutterBulletGroup     *self  = info->group;
+  ClutterActor           *actor = info->actor;
+
+  if (info->signal)
+    g_signal_handler_disconnect (obj, info->signal);
+
+  delete info;
+
+  if (CLUTTER_BULLET_IS_ACTOR (actor))
+    clutter_bullet_actor_bind (CLUTTER_BULLET_ACTOR (actor), self);
+  else
+  {
+    btCollisionShape *shape;
+    btVector3         tensor;
+    gfloat            w, h;
+
+    clutter_actor_get_size (child, &w, &h);
+
+    w /= self->priv->scale;
+    h /= self->priv->scale;
+
+    shape = new btBox2dShape (btVector3 (w / 2, h / 2, 0));
+
+    shape->setMargin (0);
+    shape->calculateLocalInertia (0, tensor);
+
+    btRigidBody *body = new btRigidBody (
+      btRigidBody::btRigidBodyConstructionInfo (
+        0,
+        new ClutterBulletMotionState (child, self->priv->scale),
+        shape,
+        tensor
+      )
+    );
+
+    self->priv->world->addRigidBody (body);
+  }
 }
 
 
