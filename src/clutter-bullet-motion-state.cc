@@ -121,19 +121,19 @@ clutter_bullet_get_euler_angles (const btMatrix3x3 *a,
 {
   if ((*a)[2][0] <= -1)
   {
-    *x = atan2 ((*a)[0][1], (*a)[0][2]);
+    *x = std::atan2 ((*a)[0][1], (*a)[0][2]);
     *y = M_PI / 2;
     *z = 0;
   }
   else if ((*a)[2][0] < 1)
   {
-    *x = atan2 ((*a)[2][1], (*a)[2][2]);
-    *y = asin (-(*a)[2][0]);
-    *z = atan2 ((*a)[1][0], (*a)[0][0]);
+    *x = std::atan2 ((*a)[2][1], (*a)[2][2]);
+    *y = std::asin (-(*a)[2][0]);
+    *z = std::atan2 ((*a)[1][0], (*a)[0][0]);
   }
   else
   {
-    *x = atan2 (-(*a)[0][1], -(*a)[0][2]);
+    *x = std::atan2 (-(*a)[0][1], -(*a)[0][2]);
     *y = -M_PI / 2;
     *z = 0;
   }
