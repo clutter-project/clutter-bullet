@@ -64,12 +64,12 @@ GType          clutter_bullet_actor_get_type  (void);
 
 ClutterActor * clutter_bullet_actor_get_actor (ClutterBulletActor *self);
 
-btRigidBody *  clutter_bullet_actor_get_body  (ClutterActor       *self);
+btRigidBody *  clutter_bullet_actor_get_body  (ClutterBulletActor *self);
 
-void           clutter_bullet_actor_bind      (ClutterActor       *self,
+void           clutter_bullet_actor_bind      (ClutterBulletActor *self,
                                                ClutterBulletGroup *group);
 
-void           clutter_bullet_actor_unbind    (ClutterActor       *self,
+void           clutter_bullet_actor_unbind    (ClutterBulletActor *self,
                                                ClutterBulletGroup *group);
 
 
