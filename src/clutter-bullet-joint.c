@@ -61,7 +61,7 @@ G_DEFINE_ABSTRACT_TYPE (
   ClutterBulletJoint,
   clutter_bullet_joint,
   G_TYPE_OBJECT
-);
+)
 
 
 
@@ -132,10 +132,10 @@ void
 clutter_bullet_joint_fix (ClutterBulletJoint *self,
                           ClutterBulletGroup *group)
 {
+  GSList *node;
+
   if (self->priv->group != NULL)
     return;
-
-  GSList *node;
 
   self->priv->group   = group;
   self->priv->actors  = g_slist_reverse (self->priv->actors);
@@ -148,7 +148,7 @@ clutter_bullet_joint_fix (ClutterBulletJoint *self,
     {
       GCallback     call   = G_CALLBACK (clutter_bullet_joint_check);
       ClutterActor *actor  = CLUTTER_ACTOR (node->data);
-      gulong       *signal = new gulong;
+      gulong       *signal = g_new (gulong, 1);
       const gchar  *name;
 
       if (CLUTTER_BULLET_IS_ACTOR (actor))
@@ -260,7 +260,7 @@ clutter_bullet_joint_bind (ClutterBulletJoint *self)
     gulong       *signal = (gulong *) signals->data;
 
     g_signal_handler_disconnect (actor, *signal);
-    delete signal;
+    g_free (signal);
 
     actors  = actors->next;
     signals = g_slist_delete_link (signals, signals);

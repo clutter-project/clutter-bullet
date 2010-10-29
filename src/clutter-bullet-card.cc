@@ -88,7 +88,7 @@ G_DEFINE_TYPE_WITH_CODE (
     CLUTTER_BULLET_TYPE_ACTOR,
     clutter_bullet_actor_iface_init
   )
-);
+)
 
 
 

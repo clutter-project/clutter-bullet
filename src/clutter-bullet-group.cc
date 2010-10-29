@@ -137,7 +137,7 @@ G_DEFINE_TYPE_WITH_CODE (
     CLUTTER_TYPE_CONTAINER,
     clutter_container_iface_init
   )
-);
+)
 
 
 
@@ -338,7 +338,7 @@ clutter_bullet_group_add (ClutterContainer *self,
 
   if (parent == NULL)
   {
-    ClutterBulletGroupInfo *info = new ClutterBulletGroupInfo;
+    ClutterBulletGroupInfo *info = g_new (ClutterBulletGroupInfo, 1);
     info->group  = CLUTTER_BULLET_GROUP (self);
     info->object = child;
     info->signal = 0;
@@ -458,7 +458,7 @@ clutter_bullet_group_detach_info (gpointer data)
   if (info->signal)
     g_signal_handler_disconnect (info->object, info->signal);
 
-  delete info;
+  g_free (info);
 }
 
 

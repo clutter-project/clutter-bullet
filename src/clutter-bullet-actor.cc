@@ -30,7 +30,7 @@ G_DEFINE_INTERFACE (
   ClutterBulletActor,
   clutter_bullet_actor,
   CLUTTER_TYPE_ACTOR
-);
+)
 
 
 
