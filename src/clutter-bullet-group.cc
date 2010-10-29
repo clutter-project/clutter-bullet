@@ -33,7 +33,6 @@
 
 
 #define CLUTTER_BULLET_GROUP_INFO_KEY "clutter-bullet-group-info"
-#define CLUTTER_BULLET_GROUP_BODY_KEY "clutter-bullet-group-body"
 
 #define CLUTTER_BULLET_GROUP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), CLUTTER_BULLET_TYPE_GROUP, ClutterBulletGroupPrivate))
 
@@ -109,7 +108,7 @@ static void     clutter_bullet_group_set_property (GObject               *obj,
 static void     clutter_bullet_group_add          (ClutterContainer      *self,
                                                    ClutterActor          *actor);
 
-static void     clutter_bullet_group_bind         (GObject               *obj,
+static void     clutter_bullet_group_real_bind    (GObject               *obj,
                                                    GParamSpec            *spec,
                                                    gpointer               data);
 
@@ -354,12 +353,12 @@ clutter_bullet_group_add (ClutterContainer *self,
       GObjectClass *klass = G_OBJECT_GET_CLASS (child);
       GParamSpec   *spec  = g_object_class_find_property (klass, name);
 
-      clutter_bullet_group_bind (G_OBJECT (child), spec, actor);
+      clutter_bullet_group_real_bind (G_OBJECT (child), spec, actor);
     }
     else
     {
       const gchar *name = "notify::allocation";
-      GCallback    call = G_CALLBACK (clutter_bullet_group_bind);
+      GCallback    call = G_CALLBACK (clutter_bullet_group_real_bind);
 
       info->signal = g_signal_connect (child, name, call, actor);
     }
@@ -368,10 +367,35 @@ clutter_bullet_group_add (ClutterContainer *self,
 
 
 
+void
+clutter_bullet_group_bind (ClutterBulletGroup *self,
+                           ClutterActor       *actor)
+{
+  ClutterActor *child = actor;
+
+  if (CLUTTER_BULLET_IS_ACTOR (actor))
+  {
+    ClutterBulletActor *shell = CLUTTER_BULLET_ACTOR (actor);
+
+    child = clutter_bullet_actor_get_actor (shell);
+
+    if (child == NULL)
+      child = actor;
+  }
+
+  const gchar  *name  = "allocation";
+  GObjectClass *klass = G_OBJECT_GET_CLASS (child);
+  GParamSpec   *spec  = g_object_class_find_property (klass, name);
+
+  clutter_bullet_group_real_bind (G_OBJECT (child), spec, actor);
+}
+
+
+
 static void
-clutter_bullet_group_bind (GObject    *obj,
-                           GParamSpec *spec,
-                           gpointer    data)
+clutter_bullet_group_real_bind (GObject    *obj,
+                                GParamSpec *spec,
+                                gpointer    data)
 {
   ClutterActor *child = CLUTTER_ACTOR (obj);
   ClutterActor *actor = CLUTTER_ACTOR (data);
@@ -419,7 +443,7 @@ clutter_bullet_group_bind (GObject    *obj,
     self->priv->world->addRigidBody (body->body);
 
     g_object_set_data_full (G_OBJECT (actor),
-                            CLUTTER_BULLET_GROUP_BODY_KEY,
+                            CLUTTER_BULLET_ACTOR_BODY_KEY,
                             body, clutter_bullet_group_detach_body);
   }
 }
@@ -459,7 +483,7 @@ clutter_bullet_group_remove (ClutterContainer *self,
                              ClutterActor     *actor)
 {
   ClutterActor *child = actor;
-  const gchar  *body  = CLUTTER_BULLET_GROUP_BODY_KEY;
+  const gchar  *body  = CLUTTER_BULLET_ACTOR_BODY_KEY;
   const gchar  *info  = CLUTTER_BULLET_GROUP_INFO_KEY;
 
   g_object_set_data (G_OBJECT (actor), body, NULL);
@@ -529,7 +553,7 @@ clutter_bullet_group_real_stop (ClutterBulletGroup *self)
 static gboolean
 clutter_bullet_group_update (gpointer data)
 {
-  ClutterBulletGroup *self  = (ClutterBulletGroup *) data;
+  ClutterBulletGroup *self  = CLUTTER_BULLET_GROUP (data);
   gdouble             delta = 0;
   GTimeVal            time;
 

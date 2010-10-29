@@ -25,6 +25,10 @@
 
 
 
+#include "clutter-bullet-group.h"
+
+
+
 G_BEGIN_DECLS
 
 
@@ -58,15 +62,22 @@ struct _ClutterBulletJointClass
 {
   GObjectClass   parent;
 
-  void         (*bind) (ClutterBulletJoint *);
+  void         (*bind) (ClutterBulletJoint *self,
+                        ClutterBulletGroup *group,
+                        GSList             *actors);
 };
 
 
 
-void clutter_bullet_joint_add    (ClutterBulletJoint *self,
-                                  ClutterActor       *actor);
+void clutter_bullet_joint_set (ClutterBulletJoint *self,
+                               ClutterBulletGroup *group,
+                               ...);
 
-void clutter_bullet_joint_listen (ClutterBulletJoint *self);
+void clutter_bullet_joint_add (ClutterBulletJoint *self,
+                               ClutterActor       *actor);
+
+void clutter_bullet_joint_fix (ClutterBulletJoint *self,
+                               ClutterBulletGroup *group);
 
 
 
