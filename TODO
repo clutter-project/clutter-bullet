@@ -1,6 +1,5 @@
--4. finished fixing ClutterBulletGroup add + bind
--3. finished fixing ClutterBulletGroup remove
--2. disabled signal handlers if removed before bound
--1. checked and emitted notify signal on body in ClutterBulletActor
- 0. minimize include dependencies
- 1. figure out this signal order independence works...
+-1. error handling in ClutterBulletJoint
+ 0. error handling in ClutterBulletActor
+ 1. error handling in ClutterBulletCard
+ 2. error handling in ClutterBulletGroup
+ 3. error handling in ClutterBulletPivot
