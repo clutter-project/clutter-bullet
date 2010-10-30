@@ -69,15 +69,17 @@ struct _ClutterBulletJointClass
 
 
 
-void clutter_bullet_joint_set (ClutterBulletJoint *self,
-                               ClutterBulletGroup *group,
-                               ...);
+GType clutter_bullet_joint_get_type (void);
 
-void clutter_bullet_joint_add (ClutterBulletJoint *self,
-                               ClutterActor       *actor);
+void  clutter_bullet_joint_set      (ClutterBulletJoint *self,
+                                     ClutterBulletGroup *group,
+                                     ...);
 
-void clutter_bullet_joint_fix (ClutterBulletJoint *self,
-                               ClutterBulletGroup *group);
+void  clutter_bullet_joint_add      (ClutterBulletJoint *self,
+                                     ClutterActor       *actor);
+
+void  clutter_bullet_joint_fix      (ClutterBulletJoint *self,
+                                     ClutterBulletGroup *group);
 
 
 

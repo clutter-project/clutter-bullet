@@ -137,8 +137,8 @@ clutter_bullet_joint_fix (ClutterBulletJoint *self,
   if (self->priv->group != NULL)
     return;
 
-  self->priv->group   = group;
-  self->priv->actors  = g_slist_reverse (self->priv->actors);
+  self->priv->group  = group;
+  self->priv->actors = g_slist_reverse (self->priv->actors);
 
   clutter_bullet_joint_update (self);
 
