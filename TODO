@@ -1,5 +1,5 @@
 -1. error handling in ClutterBulletJoint
- 0. error handling in ClutterBulletActor
- 1. error handling in ClutterBulletCard
- 2. error handling in ClutterBulletGroup
- 3. error handling in ClutterBulletPivot
+ 0. error handling in ClutterBulletPivot
+ 1. error handling in ClutterBulletActor
+ 2. error handling in ClutterBulletCard
+ 3. error handling in ClutterBulletGroup

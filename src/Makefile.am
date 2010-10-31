@@ -5,7 +5,8 @@ CLUTTER_BULLET = clutter-bullet-actor.cc        \
                  clutter-bullet-card.cc         \
                  clutter-bullet-group.cc        \
                  clutter-bullet-joint.c         \
-                 clutter-bullet-motion-state.cc
+                 clutter-bullet-motion-state.cc \
+                 clutter-bullet-pivot.cc
 
 bin_PROGRAMS = clutter-bullet-test
 

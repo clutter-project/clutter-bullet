@@ -25,6 +25,10 @@
 
 
 
+#include "clutter-bullet-joint.h"
+
+
+
 G_BEGIN_DECLS
 
 
