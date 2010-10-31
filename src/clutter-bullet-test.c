@@ -43,7 +43,8 @@ main (int   argc,
     { 255, 255, 0, 255 }
   };
 
-  ClutterActor *actor = NULL;
+  ClutterActor  *actor[2];
+  ClutterVertex  pivot[2];
 
   clutter_init (&argc, &argv);
 
@@ -56,35 +57,60 @@ main (int   argc,
   group = clutter_bullet_group_new (100);
   clutter_container_add_actor (CLUTTER_CONTAINER (stage), group);
 
-  actor = clutter_rectangle_new_with_color (colour + 1);
-  clutter_actor_set_position (actor, 100, 0);
-  clutter_actor_set_depth (actor, 10);
-  clutter_actor_set_size (actor, 100, 100);
-  clutter_actor_set_rotation (actor, CLUTTER_X_AXIS, 20, 50, 50, 0);
-  actor = clutter_bullet_card_new (actor, 1);
-  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor);
+  actor[0] = clutter_rectangle_new_with_color (colour + 1);
+  clutter_actor_set_position (actor[0], 100, 0);
+  clutter_actor_set_depth (actor[0], 10);
+  clutter_actor_set_size (actor[0], 100, 100);
+  clutter_actor_set_rotation (actor[0], CLUTTER_X_AXIS, 20, 50, 50, 0);
+  actor[0] = clutter_bullet_card_new (actor[0], 1);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
 
-  actor = clutter_rectangle_new_with_color (colour + 2);
-  clutter_actor_set_position (actor, 150, 0);
-  clutter_actor_set_depth (actor, 0);
-  clutter_actor_set_size (actor, 200, 100);
-  clutter_actor_set_rotation (actor, CLUTTER_Y_AXIS, 90, 100, 50, 0);
-  actor = clutter_bullet_card_new (actor, 1);
-  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor);
+  actor[0] = clutter_rectangle_new_with_color (colour + 2);
+  clutter_actor_set_position (actor[0], 150, 0);
+  clutter_actor_set_depth (actor[0], 0);
+  clutter_actor_set_size (actor[0], 200, 100);
+  clutter_actor_set_rotation (actor[0], CLUTTER_Y_AXIS, 90, 100, 50, 0);
+  actor[0] = clutter_bullet_card_new (actor[0], 1);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
 
-  actor = clutter_rectangle_new_with_color (colour + 3);
-  clutter_actor_set_position (actor, 0, 250);
-  clutter_actor_set_depth (actor, 0);
-  clutter_actor_set_size (actor, 200, 100);
-  clutter_actor_set_rotation (actor, CLUTTER_X_AXIS, 90, 100, 50, 0);
-  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor);
+  actor[0] = clutter_rectangle_new_with_color (colour + 3);
+  clutter_actor_set_position (actor[0], 0, 250);
+  clutter_actor_set_depth (actor[0], 0);
+  clutter_actor_set_size (actor[0], 200, 100);
+  clutter_actor_set_rotation (actor[0], CLUTTER_X_AXIS, 90, 100, 50, 0);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
 
-  actor = clutter_rectangle_new_with_color (colour + 4);
-  clutter_actor_set_position (actor, 200, 350);
-  clutter_actor_set_depth (actor, 0);
-  clutter_actor_set_size (actor, 200, 100);
-  clutter_actor_set_rotation (actor, CLUTTER_X_AXIS, 90, 100, 50, 0);
-  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor);
+  actor[0] = clutter_rectangle_new_with_color (colour + 4);
+  clutter_actor_set_position (actor[0], 200, 350);
+  clutter_actor_set_depth (actor[0], 0);
+  clutter_actor_set_size (actor[0], 200, 100);
+  clutter_actor_set_rotation (actor[0], CLUTTER_X_AXIS, 90, 100, 50, 0);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
+
+  actor[0] = clutter_rectangle_new_with_color (colour + 1);
+  clutter_actor_set_position (actor[0], 300, -100);
+  clutter_actor_set_depth (actor[0], -10);
+  clutter_actor_set_size (actor[0], 200, 100);
+  clutter_actor_set_rotation (actor[0], CLUTTER_X_AXIS, 0, 100, 50, 0);
+  actor[0] = clutter_bullet_card_new (actor[0], 1);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
+
+  actor[1] = clutter_rectangle_new_with_color (colour + 2);
+  clutter_actor_set_position (actor[1], 500, -50);
+  clutter_actor_set_depth (actor[1], 40);
+  clutter_actor_set_size (actor[1], 100, 100);
+  clutter_actor_set_rotation (actor[1], CLUTTER_X_AXIS, 90, 50, 50, 0);
+  actor[1] = clutter_bullet_card_new (actor[1], 1);
+  clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[1]);
+
+  pivot[0].x = 100;
+  pivot[0].y = 50;
+  pivot[0].z = 0;
+  pivot[1].x = -50;
+  pivot[1].y = 50;
+  pivot[1].z = 0;
+
+  clutter_bullet_pivot_new (actor[0], pivot + 0, actor[1], pivot + 1);
 
   clutter_bullet_group_start (CLUTTER_BULLET_GROUP (group));
 
