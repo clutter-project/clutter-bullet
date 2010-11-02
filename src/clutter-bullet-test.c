@@ -88,7 +88,7 @@ main (int   argc,
   clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
 
   actor[0] = clutter_rectangle_new_with_color (colour + 1);
-  clutter_actor_set_position (actor[0], 300, -100);
+  clutter_actor_set_position (actor[0], 300, 0);
   clutter_actor_set_depth (actor[0], -10);
   clutter_actor_set_size (actor[0], 200, 100);
   clutter_actor_set_rotation (actor[0], CLUTTER_X_AXIS, 0, 100, 50, 0);
@@ -96,7 +96,7 @@ main (int   argc,
   clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
 
   actor[1] = clutter_rectangle_new_with_color (colour + 2);
-  clutter_actor_set_position (actor[1], 500, -50);
+  clutter_actor_set_position (actor[1], 500, 50);
   clutter_actor_set_depth (actor[1], 40);
   clutter_actor_set_size (actor[1], 100, 100);
   clutter_actor_set_rotation (actor[1], CLUTTER_X_AXIS, 90, 50, 50, 0);
