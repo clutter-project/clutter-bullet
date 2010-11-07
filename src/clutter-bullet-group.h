@@ -43,6 +43,7 @@ typedef struct _ClutterBulletGroupClass   ClutterBulletGroupClass;
 typedef struct _ClutterBulletGroupPrivate ClutterBulletGroupPrivate;
 
 typedef struct btDynamicsWorld            btDynamicsWorld;
+typedef struct btRigidBody                btRigidBody;
 
 
 
@@ -74,6 +75,9 @@ ClutterActor *    clutter_bullet_group_new       (gdouble             scale);
 btDynamicsWorld * clutter_bullet_group_get_world (ClutterBulletGroup *self);
 
 gdouble           clutter_bullet_group_get_scale (ClutterBulletGroup *self);
+
+btRigidBody *     clutter_bullet_group_get_body  (ClutterBulletGroup *self,
+                                                  ClutterActor       *actor);
 
 void              clutter_bullet_group_bind      (ClutterBulletGroup *self,
                                                   ClutterActor       *actor);

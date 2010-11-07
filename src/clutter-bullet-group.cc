@@ -33,6 +33,7 @@
 
 
 #define CLUTTER_BULLET_GROUP_INFO_KEY "clutter-bullet-group-info"
+#define CLUTTER_BULLET_GROUP_BODY_KEY "clutter-bullet-group-body"
 
 #define CLUTTER_BULLET_GROUP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), CLUTTER_BULLET_TYPE_GROUP, ClutterBulletGroupPrivate))
 
@@ -316,6 +317,65 @@ clutter_bullet_group_get_scale (ClutterBulletGroup *self)
 
 
 
+btRigidBody *
+clutter_bullet_group_get_body (ClutterBulletGroup *self,
+                               ClutterActor       *actor)
+{
+  btRigidBody *body = NULL;
+
+  g_return_val_if_fail (CLUTTER_IS_ACTOR (actor), NULL);
+
+  if (CLUTTER_BULLET_IS_ACTOR (actor))
+  {
+    ClutterBulletActor *shell = CLUTTER_BULLET_ACTOR (actor);
+
+    if ((body = clutter_bullet_actor_get_body (shell)) == NULL)
+    {
+      ClutterActor *child = clutter_bullet_actor_get_actor (shell);
+
+      if (CLUTTER_BULLET_IS_GROUP (self) && clutter_actor_has_allocation (child))
+      {
+        /*
+         * there's no real reason this should happen
+         * but if it does, we might loop indefinitely
+         * depending on what notify::body handlers do
+         * in almost all cases, it won't loop forever
+         */
+
+        g_warning ("ClutterBulletActor notify::body imminent");
+
+        clutter_bullet_group_bind (self, actor);
+
+        body = clutter_bullet_actor_get_body (shell);
+      }
+    }
+  }
+  else
+  {
+    GObject                *obj;
+    const gchar            *key;
+    ClutterBulletGroupBody *data;
+
+    obj  = G_OBJECT (actor);
+    key  = CLUTTER_BULLET_GROUP_BODY_KEY;
+    data = (ClutterBulletGroupBody *) g_object_get_data (obj, key);
+
+    if (data == NULL && CLUTTER_BULLET_IS_GROUP (self) && clutter_actor_has_allocation (actor))
+    {
+      clutter_bullet_group_bind (self, actor);
+
+      data = (ClutterBulletGroupBody *) g_object_get_data (obj, key);
+    }
+
+    if (data != NULL)
+      body = data->body;
+  }
+
+  return body;
+}
+
+
+
 static void
 clutter_bullet_group_add (ClutterContainer *self,
                           ClutterActor     *actor)
@@ -443,7 +503,7 @@ clutter_bullet_group_real_bind (GObject    *obj,
     self->priv->world->addRigidBody (body->body);
 
     g_object_set_data_full (G_OBJECT (actor),
-                            CLUTTER_BULLET_ACTOR_BODY_KEY,
+                            CLUTTER_BULLET_GROUP_BODY_KEY,
                             body, clutter_bullet_group_detach_body);
   }
 }
@@ -483,7 +543,7 @@ clutter_bullet_group_remove (ClutterContainer *self,
                              ClutterActor     *actor)
 {
   ClutterActor *child = actor;
-  const gchar  *body  = CLUTTER_BULLET_ACTOR_BODY_KEY;
+  const gchar  *body  = CLUTTER_BULLET_GROUP_BODY_KEY;
   const gchar  *info  = CLUTTER_BULLET_GROUP_INFO_KEY;
 
   g_object_set_data (G_OBJECT (actor), body, NULL);

@@ -38,14 +38,10 @@ G_BEGIN_DECLS
 #define CLUTTER_BULLET_IS_ACTOR(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CLUTTER_BULLET_TYPE_ACTOR))
 #define CLUTTER_BULLET_ACTOR_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), CLUTTER_BULLET_TYPE_ACTOR, ClutterBulletActorInterface))
 
-#define CLUTTER_BULLET_ACTOR_BODY_KEY            "clutter-bullet-actor-body"
-
 
 
 typedef struct _ClutterBulletActor          ClutterBulletActor;
 typedef struct _ClutterBulletActorInterface ClutterBulletActorInterface;
-
-typedef struct btRigidBody                  btRigidBody;
 
 
 

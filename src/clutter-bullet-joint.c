@@ -216,74 +216,31 @@ clutter_bullet_joint_update (ClutterBulletJoint *self)
 
   for (node = self->priv->actors; node != NULL; node = node->next)
   {
-    ClutterActor *actor;
-    gpointer      body;
+    ClutterBulletGroup *group;
+    ClutterActor       *parent;
+    ClutterActor       *actor;
+    ClutterActor       *child;
 
     actor = CLUTTER_ACTOR (node->data);
+    child = actor;
 
     if (CLUTTER_BULLET_IS_ACTOR (actor))
     {
-      ClutterBulletActor *shell;
-      ClutterActor       *child;
+      ClutterBulletActor *shell = CLUTTER_BULLET_ACTOR (actor);
 
-      shell = CLUTTER_BULLET_ACTOR (actor);
       child = clutter_bullet_actor_get_actor (shell);
-      body  = clutter_bullet_actor_get_body  (shell);
 
       if (child == NULL)
         child = actor;
-
-      if (body == NULL && clutter_actor_has_allocation (child))
-      {
-        ClutterActor *parent;
-
-        parent = clutter_actor_get_parent (child);
-
-        g_warning ("ClutterBulletActor has allocation but no body");
-
-        if (CLUTTER_BULLET_IS_GROUP (parent))
-        {
-          ClutterBulletGroup *group;
-
-          group = CLUTTER_BULLET_GROUP (parent);
-
-          clutter_bullet_group_bind (group, actor);
-
-          body = clutter_bullet_actor_get_body (shell);
-        }
-        else
-          g_warning ("ClutterBulletActor not child of ClutterBulletGroup");
-      }
-    }
-    else
-    {
-      const gchar *key;
-
-      key  = CLUTTER_BULLET_ACTOR_BODY_KEY;
-      body = g_object_get_data (G_OBJECT (actor), key);
-
-      if (body == NULL && clutter_actor_has_allocation (actor))
-      {
-        ClutterActor *parent;
-
-        parent = clutter_actor_get_parent (actor);
-
-        if (CLUTTER_BULLET_IS_GROUP (parent))
-        {
-          ClutterBulletGroup *group;
-
-          group = CLUTTER_BULLET_GROUP (parent);
-
-          clutter_bullet_group_bind (group, actor);
-
-          body = g_object_get_data (G_OBJECT (actor), key);
-        }
-        else
-          g_warning ("ClutterActor not child of ClutterBulletGroup");
-      }
     }
 
-    if (body == NULL)
+    parent = clutter_actor_get_parent (child);
+    group  = NULL;
+
+    if (CLUTTER_BULLET_IS_GROUP (parent))
+      group = CLUTTER_BULLET_GROUP (parent);
+
+    if (clutter_bullet_group_get_body (group, actor) == NULL)
       self->priv->pending++;
   }
 }
@@ -311,9 +268,9 @@ clutter_bullet_joint_bind (ClutterBulletJoint *self)
 
   while (actors != NULL && signals != NULL)
   {
+    ClutterActor *parent;
     ClutterActor *actor  = CLUTTER_ACTOR (actors->data);
     ClutterActor *child  = actor;
-    ClutterActor *parent;
     gulong       *signal = (gulong *) signals->data;
 
     /* obtain the correct child actor */
@@ -333,7 +290,8 @@ clutter_bullet_joint_bind (ClutterBulletJoint *self)
     g_warn_if_fail (CLUTTER_BULLET_IS_GROUP (parent));
     g_warn_if_fail (group == NULL || group == CLUTTER_BULLET_GROUP (parent));
 
-    group = CLUTTER_BULLET_GROUP (parent);
+    if (group == NULL && CLUTTER_BULLET_IS_GROUP (parent))
+      group = CLUTTER_BULLET_GROUP (parent);
 
     g_signal_handler_disconnect (actor, *signal);
     g_free (signal);
@@ -345,7 +303,5 @@ clutter_bullet_joint_bind (ClutterBulletJoint *self)
   g_warn_if_fail (actors  == NULL);
   g_warn_if_fail (signals == NULL);
 
-  actors = self->priv->actors;
-
-  CLUTTER_BULLET_JOINT_GET_CLASS (self)->bind (self, group, actors);
+  CLUTTER_BULLET_JOINT_GET_CLASS (self)->bind (self, group, self->priv->actors);
 }

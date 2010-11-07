@@ -229,6 +229,8 @@ clutter_bullet_pivot_set_property (GObject      *obj,
     case PROP_PIVOT_0:
       vertex = (const ClutterVertex *) g_value_get_boxed (val);
 
+      g_return_if_fail (vertex != NULL);
+
       self->priv->pivot[0].x = vertex->x;
       self->priv->pivot[0].y = vertex->y;
       self->priv->pivot[0].z = vertex->z;
@@ -247,6 +249,8 @@ clutter_bullet_pivot_set_property (GObject      *obj,
 
     case PROP_PIVOT_1:
       vertex = (const ClutterVertex *) g_value_get_boxed (val);
+
+      g_return_if_fail (vertex != NULL);
 
       self->priv->pivot[1].x = vertex->x;
       self->priv->pivot[1].y = vertex->y;
@@ -295,34 +299,8 @@ clutter_bullet_pivot_bind (ClutterBulletJoint *joint,
   self     = CLUTTER_BULLET_PIVOT (joint);
   actor[0] = CLUTTER_ACTOR (actors->data);
   actor[1] = CLUTTER_ACTOR (actors->next->data);
-
-  if (CLUTTER_BULLET_IS_ACTOR (actor[0]))
-  {
-    ClutterBulletActor *shell = CLUTTER_BULLET_ACTOR (actor[0]);
-
-    body[0] = clutter_bullet_actor_get_body (shell);
-  }
-  else
-  {
-    GObject     *obj = G_OBJECT (actor[0]);
-    const gchar *key = CLUTTER_BULLET_ACTOR_BODY_KEY;
-
-    body[0] = (btRigidBody *) g_object_get_data (obj, key);
-  }
-
-  if (CLUTTER_BULLET_IS_ACTOR (actor[1]))
-  {
-    ClutterBulletActor *shell = CLUTTER_BULLET_ACTOR (actor[1]);
-
-    body[1] = clutter_bullet_actor_get_body (shell);
-  }
-  else
-  {
-    GObject     *obj = G_OBJECT (actor[1]);
-    const gchar *key = CLUTTER_BULLET_ACTOR_BODY_KEY;
-
-    body[1] = (btRigidBody *) g_object_get_data (obj, key);
-  }
+  body[0]  = clutter_bullet_group_get_body (group, actor[0]);
+  body[1]  = clutter_bullet_group_get_body (group, actor[1]);
 
   g_return_if_fail (body[0] != NULL);
   g_return_if_fail (body[1] != NULL);
