@@ -92,7 +92,7 @@ main (int   argc,
   clutter_actor_set_depth (actor[0], -10);
   clutter_actor_set_size (actor[0], 200, 100);
   clutter_actor_set_rotation (actor[0], CLUTTER_X_AXIS, 0, 100, 50, 0);
-  actor[0] = clutter_bullet_card_new (actor[0], 1);
+  /* actor[0] = clutter_bullet_card_new (actor[0], 1); */
   clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[0]);
 
   actor[1] = clutter_rectangle_new_with_color (colour + 2);
@@ -103,11 +103,11 @@ main (int   argc,
   actor[1] = clutter_bullet_card_new (actor[1], 1);
   clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[1]);
 
-  pivot[0].x = 100;
-  pivot[0].y = 50;
+  pivot[0].x = 105;
+  pivot[0].y = 55;
   pivot[0].z = 0;
-  pivot[1].x = -50;
-  pivot[1].y = 50;
+  pivot[1].x = -55;
+  pivot[1].y = 55;
   pivot[1].z = 0;
 
   clutter_bullet_pivot_new (actor[0], pivot + 0, actor[1], pivot + 1);
