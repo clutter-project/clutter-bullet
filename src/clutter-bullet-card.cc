@@ -286,6 +286,9 @@ clutter_bullet_card_bind (ClutterBulletActor *self,
     )
   );
 
+  card->priv->body->setDamping (0.4, 0.4);
+  card->priv->body->setSleepingThresholds (0.01, 0.01);
+
   clutter_bullet_group_get_world (group)->addRigidBody (card->priv->body);
 }
 

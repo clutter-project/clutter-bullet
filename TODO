@@ -3,3 +3,4 @@
  1. error handling in ClutterBulletActor
  2. error handling in ClutterBulletCard
  3. error handling in ClutterBulletGroup
+ 4. damping and sleep threshold properties
