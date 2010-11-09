@@ -183,11 +183,11 @@ clutter_bullet_card_get_property (GObject    *obj,
       break;
 
     case PROP_MASS:
-      g_value_set_double (val, self->priv->mass);
+      g_value_set_double (val, clutter_bullet_card_get_mass (self));
       break;
 
     case PROP_MARGIN:
-      g_value_set_double (val, self->priv->margin);
+      g_value_set_double (val, clutter_bullet_card_get_margin (self));
       break;
 
     default:
@@ -219,19 +219,85 @@ clutter_bullet_card_set_property (GObject      *obj,
       break;
 
     case PROP_MASS:
-      self->priv->mass = g_value_get_double (val);
-      g_object_notify (obj, "mass");
+      clutter_bullet_card_set_mass (self, g_value_get_double (val));
       break;
 
     case PROP_MARGIN:
-      self->priv->margin = g_value_get_double (val);
-      g_object_notify (obj, "margin");
+      clutter_bullet_card_set_margin (self, g_value_get_double (val));
       break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, key, spec);
       break;
   }
+}
+
+
+
+gdouble
+clutter_bullet_card_get_mass (ClutterBulletCard *self)
+{
+  return self->priv->mass;
+}
+
+
+
+void
+clutter_bullet_card_set_mass (ClutterBulletCard *self,
+                              gdouble            mass)
+{
+  self->priv->mass = mass;
+
+  if (self->priv->body != NULL)
+  {
+    btCollisionShape *shape;
+    btVector3         tensor;
+
+    shape = self->priv->body->getCollisionShape ();
+
+    if (shape != NULL)
+      shape->calculateLocalInertia (mass, tensor);
+    else
+    {
+      tensor = self->priv->body->getInvInertiaDiagLocal ();
+
+      if (tensor.x ())
+        tensor.setX (1 / tensor.x ());
+
+      if (tensor.y ())
+        tensor.setY (1 / tensor.y ());
+
+      if (tensor.z ())
+        tensor.setZ (1 / tensor.z ());
+    }
+
+    self->priv->body->setMassProps (mass, tensor);
+  }
+
+  g_object_notify (G_OBJECT (self), "mass");
+}
+
+
+
+gdouble
+clutter_bullet_card_get_margin (ClutterBulletCard *self)
+{
+  return self->priv->margin;
+}
+
+
+
+void
+clutter_bullet_card_set_margin (ClutterBulletCard *self,
+                                gdouble            margin)
+{
+  self->priv->margin = margin;
+
+  if (self->priv->body != NULL)
+    if (self->priv->body->getCollisionShape () != NULL)
+      self->priv->body->getCollisionShape ()->setMargin (margin);
+
+  g_object_notify (G_OBJECT (self), "margin");
 }
 
 

@@ -61,9 +61,19 @@ struct _ClutterBulletCardClass
 
 
 
-GType          clutter_bullet_card_get_type (void);
+GType          clutter_bullet_card_get_type   (void);
 
-ClutterActor * clutter_bullet_card_new      (ClutterActor *actor);
+ClutterActor * clutter_bullet_card_new        (ClutterActor      *actor);
+
+gdouble        clutter_bullet_card_get_mass   (ClutterBulletCard *self);
+
+void           clutter_bullet_card_set_mass   (ClutterBulletCard *self,
+                                               gdouble            mass);
+
+gdouble        clutter_bullet_card_get_margin (ClutterBulletCard *self);
+
+void           clutter_bullet_card_set_margin (ClutterBulletCard *self,
+                                               gdouble            margin);
 
 
 

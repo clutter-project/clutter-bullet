@@ -234,7 +234,7 @@ clutter_bullet_group_get_property (GObject    *obj,
   switch (key)
   {
     case PROP_SCALE:
-      g_value_set_double (val, self->priv->scale);
+      g_value_set_double (val, clutter_bullet_group_get_scale (self));
       break;
 
     case PROP_GRAVITY:
