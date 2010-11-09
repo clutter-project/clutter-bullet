@@ -4,3 +4,4 @@
  2. error handling in ClutterBulletCard
  3. error handling in ClutterBulletGroup
  4. damping and sleep threshold properties
+ 5. fix clutter_bullet_card_set_margin
