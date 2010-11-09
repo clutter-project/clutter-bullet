@@ -155,26 +155,10 @@ clutter_bullet_actor_iface_init (ClutterBulletActorInterface *iface,
 
 
 ClutterActor *
-clutter_bullet_card_new (ClutterActor *actor,
-                         gdouble       mass)
+clutter_bullet_card_new (ClutterActor *actor)
 {
   return CLUTTER_ACTOR (g_object_new (CLUTTER_BULLET_TYPE_CARD,
                                       "actor", actor,
-                                      "mass", mass,
-                                      NULL));
-}
-
-
-
-ClutterActor *
-clutter_bullet_card_new_with_margin (ClutterActor *actor,
-                                     gdouble       mass,
-                                     gdouble       margin)
-{
-  return CLUTTER_ACTOR (g_object_new (CLUTTER_BULLET_TYPE_CARD,
-                                      "actor", actor,
-                                      "mass", mass,
-                                      "margin", margin,
                                       NULL));
 }
 
