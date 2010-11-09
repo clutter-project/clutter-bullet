@@ -103,11 +103,11 @@ main (int   argc,
   actor[1] = clutter_bullet_card_new (actor[1]);
   clutter_container_add_actor (CLUTTER_CONTAINER (group), actor[1]);
 
-  pivot[0].x = 105;
-  pivot[0].y = 55;
+  pivot[0].x = 103;
+  pivot[0].y = 53;
   pivot[0].z = 0;
-  pivot[1].x = -55;
-  pivot[1].y = 55;
+  pivot[1].x = -53;
+  pivot[1].y = 53;
   pivot[1].z = 0;
 
   clutter_bullet_pivot_new (actor[0], pivot + 0, actor[1], pivot + 1);

@@ -246,12 +246,11 @@ void
 clutter_bullet_card_set_mass (ClutterBulletCard *self,
                               gdouble            mass)
 {
-  self->priv->mass = mass;
-
   if (self->priv->body != NULL)
   {
     btCollisionShape *shape;
     btVector3         tensor;
+    gdouble           scale;
 
     shape = self->priv->body->getCollisionShape ();
 
@@ -259,20 +258,23 @@ clutter_bullet_card_set_mass (ClutterBulletCard *self,
       shape->calculateLocalInertia (mass, tensor);
     else
     {
+      scale  = mass / self->priv->mass;
       tensor = self->priv->body->getInvInertiaDiagLocal ();
 
       if (tensor.x ())
-        tensor.setX (1 / tensor.x ());
+        tensor.setX (scale / tensor.x ());
 
       if (tensor.y ())
-        tensor.setY (1 / tensor.y ());
+        tensor.setY (scale / tensor.y ());
 
       if (tensor.z ())
-        tensor.setZ (1 / tensor.z ());
+        tensor.setZ (scale / tensor.z ());
     }
 
     self->priv->body->setMassProps (mass, tensor);
   }
+
+  self->priv->mass = mass;
 
   g_object_notify (G_OBJECT (self), "mass");
 }
@@ -291,11 +293,11 @@ void
 clutter_bullet_card_set_margin (ClutterBulletCard *self,
                                 gdouble            margin)
 {
-  self->priv->margin = margin;
-
   if (self->priv->body != NULL)
     if (self->priv->body->getCollisionShape () != NULL)
       self->priv->body->getCollisionShape ()->setMargin (margin);
+
+  self->priv->margin = margin;
 
   g_object_notify (G_OBJECT (self), "margin");
 }
