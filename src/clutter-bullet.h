@@ -28,6 +28,7 @@
 #include "clutter-bullet-actor.h"
 #include "clutter-bullet-card.h"
 #include "clutter-bullet-group.h"
+#include "clutter-bullet-hinge.h"
 #include "clutter-bullet-joint.h"
 #include "clutter-bullet-pivot.h"
 
