@@ -1,4 +1,5 @@
 AC_PREREQ([2.65])
+LT_PREREQ([2.2])
 
 AC_INIT([clutter-bullet],
         [0.0.0],
@@ -8,6 +9,8 @@ AC_INIT([clutter-bullet],
 
 AM_INIT_AUTOMAKE
 
+LT_INIT
+
 AC_CONFIG_SRCDIR([src/clutter-bullet.h])
 AM_CONFIG_HEADER([src/config.h])
 
@@ -15,7 +18,7 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 
-AC_SUBST([LIBS], [-lm])
+LT_LIB_M
 
 PKG_CHECK_MODULES([BULLET], [bullet >= 2.77])
 AC_SUBST([BULLET_CFLAGS])

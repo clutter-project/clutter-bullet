@@ -12,4 +12,4 @@ CLUTTER_BULLET = clutter-bullet-actor.cc        \
 bin_PROGRAMS = clutter-bullet-test
 
 clutter_bullet_test_SOURCES = clutter-bullet-test.c $(CLUTTER_BULLET)
-clutter_bullet_test_LDADD   = $(LIBS) $(BULLET_LIBS) $(CLUTTER_LIBS)
+clutter_bullet_test_LDADD   = $(LIBM) $(BULLET_LIBS) $(CLUTTER_LIBS)
