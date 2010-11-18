@@ -9,7 +9,11 @@ CLUTTER_BULLET = clutter-bullet-actor.cc        \
                  clutter-bullet-motion-state.cc \
                  clutter-bullet-pivot.cc
 
-bin_PROGRAMS = clutter-bullet-test
+lib_LTLIBRARIES = libclutter-bullet.la
+noinst_PROGRAMS = clutter-bullet-test
 
-clutter_bullet_test_SOURCES = clutter-bullet-test.c $(CLUTTER_BULLET)
-clutter_bullet_test_LDADD   = $(LIBM) $(BULLET_LIBS) $(CLUTTER_LIBS)
+libclutter_bullet_la_SOURCES = $(CLUTTER_BULLET)
+libclutter_bullet_la_LIBADD  = $(LIBM) $(BULLET_LIBS) $(CLUTTER_LIBS)
+
+clutter_bullet_test_SOURCES = clutter-bullet-test.c
+clutter_bullet_test_LDADD   = -lclutter-bullet

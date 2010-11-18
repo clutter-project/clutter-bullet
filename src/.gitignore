@@ -1,5 +1,8 @@
+*.la
+*.lo
 *.o
 .deps
+.libs
 clutter-bullet-test
 config.h
 config.h.in
