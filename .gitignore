@@ -3,6 +3,7 @@ Makefile
 Makefile.in
 aclocal.m4
 autom4te.cache
+clutter-bullet.pc
 config.guess
 config.log
 config.status

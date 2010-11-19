@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Clutter-Bullet
+Description: Clutter with Bullet physics support
+Version: @VERSION@
+Requires: bullet >= @BULLET_VERSION@, clutter-@CLUTTER_API_VERSION@ >= @CLUTTER_VERSION@
+Libs: -L${libdir} -lclutter-bullet
+Cflags: -I${includedir}/clutter-@CLUTTER_API_VERSION@

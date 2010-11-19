@@ -17,8 +17,8 @@ CLUTTER_BULLET_C = clutter-bullet-actor.cc        \
                    clutter-bullet-motion-state.cc \
                    clutter-bullet-pivot.cc
 
-clutter_bullet_includedir = $(includedir)/clutter-1.0/clutter-bullet
 clutter_bullet_include_HEADERS = $(CLUTTER_BULLET_H)
+clutter_bullet_includedir = $(includedir)/clutter-$(CLUTTER_API_VERSION)/clutter-bullet
 
 lib_LTLIBRARIES = libclutter-bullet.la
 
