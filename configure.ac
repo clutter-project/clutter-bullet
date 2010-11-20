@@ -13,6 +13,7 @@ LT_INIT
 
 AC_CONFIG_SRCDIR([src/clutter-bullet.h])
 AM_CONFIG_HEADER([src/config.h])
+AC_CONFIG_MACRO_DIR(m4)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -31,6 +32,8 @@ PKG_CHECK_MODULES([CLUTTER], [clutter-$CLUTTER_API_VERSION >= $CLUTTER_VERSION])
 AC_SUBST([CLUTTER_CFLAGS])
 AC_SUBST([CLUTTER_LIBS])
 
+GTK_DOC_CHECK([1.14], [--flavour no-tmpl])
+
 # checks for header files
 # checks for types
 # checks for structures
@@ -38,5 +41,12 @@ AC_SUBST([CLUTTER_LIBS])
 # checks for library functions
 # checks for system services
 
-AC_CONFIG_FILES([clutter-bullet.pc Makefile src/Makefile])
+AC_CONFIG_FILES([
+  clutter-bullet.pc
+  Makefile
+  docs/Makefile
+  docs/reference/Makefile
+  src/Makefile
+])
+
 AC_OUTPUT

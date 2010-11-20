@@ -10,7 +10,9 @@ config.status
 config.sub
 configure
 depcomp
+gtk-doc.make
 install-sh
 libtool
 ltmain.sh
+m4
 missing
