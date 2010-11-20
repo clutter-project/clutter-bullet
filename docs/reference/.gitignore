@@ -1,3 +1,4 @@
+*.bak
 *.stamp
 .libs
 clutter-bullet-decl-list.txt
