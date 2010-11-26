@@ -80,6 +80,15 @@ clutter_bullet_actor_default_init (ClutterBulletActorInterface *klass)
 
 
 
+/**
+ * clutter_bullet_actor_get_actor:
+ * @self: a #ClutterBulletActor
+ *
+ * Gets the target #ClutterActor added when @self is inserted into a
+ * #ClutterBulletGroup.  It could even be @self itself.
+ *
+ * Returns: @self's target #ClutterActor
+ */
 ClutterActor *
 clutter_bullet_actor_get_actor (ClutterBulletActor *self)
 {
@@ -97,6 +106,14 @@ clutter_bullet_actor_get_actor (ClutterBulletActor *self)
 
 
 
+/**
+ * clutter_bullet_actor_get_body:
+ * @self: a #ClutterBulletActor
+ *
+ * Gets the physical representation of @self, if it exists.
+ *
+ * Returns: @self's physical representation or #NULL if none
+ */
 btRigidBody *
 clutter_bullet_actor_get_body (ClutterBulletActor *self)
 {
@@ -109,6 +126,15 @@ clutter_bullet_actor_get_body (ClutterBulletActor *self)
 
 
 
+/**
+ * clutter_bullet_actor_bind:
+ * @self:  a #ClutterBulletActor
+ * @group: @self's new parent #ClutterBulletGroup
+ *
+ * Creates @self's body and inserts it into @group's physics
+ * simulation.  Only called when @self's real actor has a valid
+ * allocation.
+ */
 void
 clutter_bullet_actor_bind (ClutterBulletActor *self,
                            ClutterBulletGroup *group)
@@ -123,6 +149,14 @@ clutter_bullet_actor_bind (ClutterBulletActor *self,
 
 
 
+/**
+ * clutter_bullet_actor_unbind:
+ * @self:  a #ClutterBulletActor
+ * @group: @self's parent #ClutterBulletGroup
+ *
+ * Removes @self's body from @group's physics simulation and destroys
+ * it.
+ */
 void
 clutter_bullet_actor_unbind (ClutterBulletActor *self,
                              ClutterBulletGroup *group)

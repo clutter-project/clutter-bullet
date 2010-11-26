@@ -168,6 +168,15 @@ clutter_bullet_actor_iface_init (ClutterBulletActorInterface *iface,
 
 
 
+/**
+ * clutter_bullet_card_new:
+ * @actor: the #ClutterActor to wrap
+ *
+ * Creates a new #ClutterBulletCard that treats @actor like a flat
+ * rectangle when added to a #ClutterBulletGroup.
+ *
+ * Returns: a new #ClutterBulletCard based on @actor
+ */
 ClutterActor *
 clutter_bullet_card_new (ClutterActor *actor)
 {
@@ -248,6 +257,14 @@ clutter_bullet_card_set_property (GObject      *obj,
 
 
 
+/**
+ * clutter_bullet_card_get_mass:
+ * @self: a #ClutterBulletCard
+ *
+ * Gets @self's mass.
+ *
+ * Returns: @self's mass in kilograms
+ */
 gdouble
 clutter_bullet_card_get_mass (ClutterBulletCard *self)
 {
@@ -256,6 +273,14 @@ clutter_bullet_card_get_mass (ClutterBulletCard *self)
 
 
 
+/**
+ * clutter_bullet_card_set_mass:
+ * @self: a #ClutterBulletCard
+ * @mass: @self's new mass in kilograms
+ *
+ * Sets @self's mass to @mass.  Setting @mass to zero makes @self
+ * immobile.
+ */
 void
 clutter_bullet_card_set_mass (ClutterBulletCard *self,
                               gdouble            mass)
@@ -295,6 +320,14 @@ clutter_bullet_card_set_mass (ClutterBulletCard *self,
 
 
 
+/**
+ * clutter_bullet_card_get_margin:
+ * @self: a #ClutterBulletCard
+ *
+ * Gets @self's penetration allowance during collision detection.
+ *
+ * Returns: @self's penetration allowance in metres
+ */
 gdouble
 clutter_bullet_card_get_margin (ClutterBulletCard *self)
 {
@@ -303,6 +336,14 @@ clutter_bullet_card_get_margin (ClutterBulletCard *self)
 
 
 
+/**
+ * clutter_bullet_card_set_margin:
+ * @self:   a #ClutterBulletCard
+ * @margin: @self's new penetration allowance in metres
+ *
+ * Sets @self's penetration allowance during collision detection to
+ * @margin.  Don't set @margin too close to zero.
+ */
 void
 clutter_bullet_card_set_margin (ClutterBulletCard *self,
                                 gdouble            margin)
