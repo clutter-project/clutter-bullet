@@ -20,6 +20,20 @@
 
 
 
+/**
+ * SECTION:clutter-bullet-pivot
+ * @short_description: Pivot constraint between two actors
+ * @title: ClutterBulletPivot
+ *
+ * #ClutterBulletPivot fixes two actors to share a common local point,
+ * allowing them to rotate around a single pivot.  Each actor defines
+ * its own pivot point in local coordinates, and the
+ * #ClutterBulletPivot constrains both to match each other in global
+ * space.
+ */
+
+
+
 #include <clutter/clutter.h>
 
 #include "clutter-bullet-pivot.h"

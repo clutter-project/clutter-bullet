@@ -20,6 +20,19 @@
 
 
 
+/**
+ * SECTION:clutter-bullet-hinge
+ * @short_description: Hinge constraint between two actors
+ * @title: ClutterBulletHinge
+ *
+ * #ClutterBulletHinge fixes two actors to rotate along a common local
+ * axis.  Each actor defines its local axis using two pivot points in
+ * its own local coordinates, and the #ClutterBulletHinge constrains
+ * both axes to match each other in global space.
+ */
+ 
+
+
 #include <clutter/clutter.h>
 
 #include "clutter-bullet-hinge.h"

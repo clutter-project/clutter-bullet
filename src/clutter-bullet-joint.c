@@ -20,6 +20,23 @@
 
 
 
+/**
+ * SECTION:clutter-bullet-joint
+ * @short_description: Base class for constraints between actors
+ * @title: ClutterBulletJoint
+ *
+ * #ClutterBulletJoint is the base class for physical constraints
+ * between #ClutterActor<!-- -->s in a #ClutterBulletGroup.
+ *
+ * #ClutterActor<!-- -->s may or may not have physical bodies or
+ * allocations, and they may not even be contained in an actual
+ * #ClutterBulletGroup.  This class manages those cases for subclasses
+ * by delaying construction of joint constraints until all actors are
+ * ready for it.
+ */
+
+
+
 #include <clutter/clutter.h>
 
 #include "clutter-bullet-joint.h"

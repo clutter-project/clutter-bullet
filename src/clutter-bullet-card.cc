@@ -20,6 +20,20 @@
 
 
 
+/**
+ * SECTION:clutter-bullet-card
+ * @short_description: Wrapper for flat rectangular actors
+ * @title: ClutterBulletCard
+ *
+ * #ClutterBulletCard is a wrapper that treats #ClutterActor<!-- -->s
+ * as flat rectangular objects when simulated.  It is not unlike how
+ * ordinary #ClutterActor<!-- -->s are treated when inserted into a
+ * #ClutterBulletGroup, except that a #ClutterBulletCard can move if
+ * it has a positive mass.
+ */
+
+
+
 #include <clutter/clutter.h>
 
 #include "clutter-bullet-card.h"

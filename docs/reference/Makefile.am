@@ -32,7 +32,7 @@ SCAN_OPTIONS = --deprecated-guards="CLUTTER_BULLET_DISABLE_DEPRECATED"
 
 # Extra options to supply to gtkdoc-mkdb.
 # e.g. MKDB_OPTIONS=--xml-mode --output-format=xml
-MKDB_OPTIONS = --xml-mode --output-format=xml
+MKDB_OPTIONS = --sgml-mode --output-format=xml --source-suffixes=h,c,cc
 
 # Extra options to supply to gtkdoc-mktmpl
 # e.g. MKTMPL_OPTIONS=--only-section-tmpl

@@ -20,6 +20,25 @@
 
 
 
+/**
+ * SECTION:clutter-bullet-actor
+ * @short_description: Interface for physics-enabled actors
+ * @title: ClutterBulletActor
+ * @see_also: #ClutterBulletGroup
+ *
+ * #ClutterBulletActor is the interface implemented by a #ClutterActor
+ * for inserting itself into a physics simulation governed by a
+ * #ClutterBulletGroup.
+ *
+ * In general, when a non-#ClutterBulletActor #ClutterActor is added
+ * to a #ClutterBulletGroup, it's treated as a flat immobile rectangle
+ * in space that other #ClutterBulletActor<!-- -->s can collide with.
+ * Implementing #ClutterBulletActor allows a #ClutterActor to
+ * customize this treatment.
+ */
+
+
+
 #include <clutter/clutter.h>
 
 #include "clutter-bullet-actor.h"

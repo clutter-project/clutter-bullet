@@ -20,6 +20,24 @@
 
 
 
+/**
+ * SECTION:clutter-bullet-group
+ * @short_description: Container for physics-enabled actors
+ * @title: ClutterBulletGroup
+ * @see_also: #ClutterBulletActor
+ *
+ * #ClutterBulletGroup is a physics-enabled container for
+ * #ClutterActor<!-- -->s, #ClutterBulletActor<!-- -->s in particular.
+ *
+ * In general, when a non-#ClutterBulletActor #ClutterActor is added
+ * to a #ClutterBulletGroup, it's treated as a flat immobile rectangle
+ * in space that other #ClutterBulletActor<!-- -->s can collide with.
+ * #ClutterBulletActor<!-- -->s usually customize this treatment to
+ * make the simulation interesting.
+ */
+
+
+
 #include <clutter/clutter.h>
 
 #include "clutter-bullet-group.h"
