@@ -107,6 +107,15 @@ clutter_bullet_joint_class_init (ClutterBulletJointClass *klass)
 
 
 
+/**
+ * clutter_bullet_joint_set:
+ * @self: a #ClutterBulletJoint
+ * @...:  #NULL-terminated list of #ClutterActor<!-- -->s
+ *
+ * Waits for the given #ClutterActor<!-- -->s to have valid
+ * allocations.  Once they're all ready, #ClutterBulletJoint will
+ * delegate the construction of a joint constraint to a subclass.
+ */
 void
 clutter_bullet_joint_set (ClutterBulletJoint *self,
                           ...)
@@ -140,6 +149,15 @@ clutter_bullet_joint_setv (ClutterBulletJoint *self,
 
 
 
+/**
+ * clutter_bullet_joint_add:
+ * @self:  a #ClutterBulletJoint
+ * @actor: the #ClutterActor to register
+ *
+ * Adds a #ClutterActor to the list of #ClutterActor<!-- -->s
+ * participating in the joint.  Nothing else happens until
+ * clutter_bullet_joint_fix() is called.
+ */
 void
 clutter_bullet_joint_add (ClutterBulletJoint *self,
                           ClutterActor       *actor)
@@ -155,6 +173,15 @@ clutter_bullet_joint_add (ClutterBulletJoint *self,
 
 
 
+/**
+ * clutter_bullet_joint_fix:
+ * @self: a #ClutterBulletJoint
+ *
+ * Fixes the current list of participating #ClutterActor<!-- -->s and
+ * delegates the construction of a joint constraint to a subclass once
+ * all of the participating #ClutterActor<!-- -->s have valid
+ * allocations.
+ */
 void
 clutter_bullet_joint_fix (ClutterBulletJoint *self)
 {

@@ -178,6 +178,22 @@ clutter_bullet_hinge_class_init (ClutterBulletHingeClass *klass)
 
 
 
+/**
+ * clutter_bullet_hinge_new:
+ * @actor_0:   a #ClutterActor
+ * @pivot_0_0: one of @actor_0's pivots in local coordinates
+ * @pivot_0_1: another of @actor_0's pivots in local coordinates
+ * @actor_1:   a #ClutterActor
+ * @pivot_1_0: one of @actor_1's pivots in local coordinates
+ * @pivot_1_1: another of @actor_1's pivots in local coordinates
+ *
+ * Joins @actor_0 and @actor_1 together using a hinge joint
+ * constraint.  @actor_0 and @actor_1 are joined so that the axis
+ * defined by @pivot_0_0 and @pivot_0_1 is aligned with the axis
+ * defined by @pivot_1_0 and @pivot_1_1 in global space.
+ *
+ * Returns: a #ClutterBulletHinge
+ */
 ClutterBulletJoint *
 clutter_bullet_hinge_new (ClutterActor  *actor_0,
                           ClutterVertex *pivot_0_0,

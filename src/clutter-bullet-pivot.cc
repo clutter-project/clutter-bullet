@@ -153,6 +153,19 @@ clutter_bullet_pivot_class_init (ClutterBulletPivotClass *klass)
 
 
 
+/**
+ * clutter_bullet_pivot_new:
+ * @actor_0: a #ClutterActor
+ * @pivot_0: @actor_0's pivot in local coordinates
+ * @actor_1: a #ClutterActor
+ * @pivot_1: @actor_1's pivot in local coordinates
+ *
+ * Joins @actor_0 and @actor_1 together using a pivot joint
+ * constraint.  @actor_0 and @actor_1 are joined so that @pivot_0 and
+ * @pivot_1 align themselves in global space.
+ *
+ * Returns: a #ClutterBulletPivot
+ */
 ClutterBulletJoint *
 clutter_bullet_pivot_new (ClutterActor  *actor_0,
                           ClutterVertex *pivot_0,
