@@ -3,7 +3,6 @@
 .libs
 clutter-bullet-decl-list.txt
 clutter-bullet-decl.txt
-clutter-bullet-docs.sgml
 clutter-bullet-overrides.txt
 clutter-bullet-sections.txt
 clutter-bullet-undeclared.txt

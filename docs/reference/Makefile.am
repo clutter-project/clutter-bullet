@@ -28,7 +28,7 @@ SCANGOBJ_OPTIONS =
 
 # Extra options to supply to gtkdoc-scan.
 # e.g. SCAN_OPTIONS=--deprecated-guards="GTK_DISABLE_DEPRECATED"
-SCAN_OPTIONS = --deprecated-guards="CLUTTER_BULLET_DISABLE_DEPRECATED"
+SCAN_OPTIONS = --rebuild-types --deprecated-guards="CLUTTER_BULLET_DISABLE_DEPRECATED"
 
 # Extra options to supply to gtkdoc-mkdb.
 # e.g. MKDB_OPTIONS=--xml-mode --output-format=xml

@@ -110,7 +110,7 @@ clutter_bullet_joint_class_init (ClutterBulletJointClass *klass)
 /**
  * clutter_bullet_joint_set:
  * @self: a #ClutterBulletJoint
- * @...:  #NULL-terminated list of #ClutterActor<!-- -->s
+ * @...:  #NULL<!-- -->-terminated list of #ClutterActor<!-- -->s
  *
  * Waits for the given #ClutterActor<!-- -->s to have valid
  * allocations.  Once they're all ready, #ClutterBulletJoint will
