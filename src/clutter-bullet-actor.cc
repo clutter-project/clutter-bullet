@@ -110,7 +110,7 @@ clutter_bullet_actor_get_actor (ClutterBulletActor *self)
  * clutter_bullet_actor_get_body:
  * @self: a #ClutterBulletActor
  *
- * Gets the physical representation of @self, if it exists.
+ * Gets self's physical representation if it exists.
  *
  * Returns: @self's physical representation or #NULL if none
  */

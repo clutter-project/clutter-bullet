@@ -231,6 +231,17 @@ clutter_container_iface_init (ClutterContainerIface *iface,
 
 
 
+/**
+ * clutter_bullet_group_new:
+ * @scale: scaling factor in pixels per metre
+ *
+ * Creates a new #ClutterBulletGroup with its own physics simulation.
+ * @scale is a factor used to keep the simulation stable.
+ * Generally, @scale should be chosen so that actors have size between
+ * 5 cm and 10 m.
+ *
+ * Returns: a new #ClutterBulletGroup
+ */
 ClutterActor *
 clutter_bullet_group_new (gdouble scale)
 {
@@ -319,6 +330,14 @@ clutter_bullet_group_set_property (GObject      *obj,
 
 
 
+/**
+ * clutter_bullet_group_get_world:
+ * @self: a #ClutterBulletGroup
+ *
+ * Gets @self's physical representation.
+ *
+ * Returns: @self's physical representation
+ */
 btDynamicsWorld *
 clutter_bullet_group_get_world (ClutterBulletGroup *self)
 {
@@ -327,6 +346,14 @@ clutter_bullet_group_get_world (ClutterBulletGroup *self)
 
 
 
+/**
+ * clutter_bullet_group_get_scale:
+ * @self: a #ClutterBulletGroup
+ *
+ * Gets @self's scaling factor used to keep the simulation stable.
+ *
+ * Returns: @self's scale factor in pixels per metre
+ */
 gdouble
 clutter_bullet_group_get_scale (ClutterBulletGroup *self)
 {
@@ -335,6 +362,17 @@ clutter_bullet_group_get_scale (ClutterBulletGroup *self)
 
 
 
+/**
+ * clutter_bullet_group_get_body:
+ * @self:  a #ClutterBulletGroup
+ * @actor: a #ClutterActor
+ *
+ * Gets @actor's physical representation if it exists.  This is
+ * similar to clutter_bullet_actor_get_body(), except this allows
+ * queries on non-#ClutterBulletActor<!-- -->s as well.
+ *
+ * Returns: @actor's physical representation or #NULL if none
+ */
 btRigidBody *
 clutter_bullet_group_get_body (ClutterBulletGroup *self,
                                ClutterActor       *actor)
@@ -445,6 +483,14 @@ clutter_bullet_group_add (ClutterContainer *self,
 
 
 
+/**
+ * clutter_bullet_group_bind:
+ * @self:  a #ClutterBulletGroup
+ * @actor: the #ClutterActor to realize
+ *
+ * Creates @actor's body and inserts it into @self's physics
+ * simulation.
+ */
 void
 clutter_bullet_group_bind (ClutterBulletGroup *self,
                            ClutterActor       *actor)
@@ -586,6 +632,12 @@ clutter_bullet_group_remove (ClutterContainer *self,
 
 
 
+/**
+ * clutter_bullet_group_start:
+ * @self: a #ClutterBulletGroup
+ *
+ * Starts running @self's physics simulation at 60 frames per second.
+ */
 void
 clutter_bullet_group_start (ClutterBulletGroup *self)
 {
@@ -607,6 +659,12 @@ clutter_bullet_group_real_start (ClutterBulletGroup *self)
 
 
 
+/**
+ * clutter_bullet_group_stop:
+ * @self: a #ClutterBulletGroup
+ *
+ * Pauses @self's physics simulation.
+ */
 void
 clutter_bullet_group_stop (ClutterBulletGroup *self)
 {
